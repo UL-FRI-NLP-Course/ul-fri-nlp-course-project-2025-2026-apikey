@@ -127,3 +127,25 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Project data policy
+data/raw/*
+data/processed/*
+
+# Keep directory structure and documentation
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!data/samples/.gitkeep
+!data/README.md
+
+# Allow intentionally versioned tiny sample files if added later
+!data/samples/*.csv
+!data/samples/*.json
+!data/samples/*.jsonl
+!data/samples/*.txt
+
+# Notebook outputs and local artifacts
+*.nbconvert.ipynb
+data/**/*.parquet
+data/**/*.feather
+data/**/*.pkl

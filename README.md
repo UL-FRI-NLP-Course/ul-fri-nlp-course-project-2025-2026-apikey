@@ -1,3 +1,9 @@
+# Domain-Specific Fitness NLP Assistant Using Retrieval-Augmented Generation
+
+
+Domen Pahole, Luka Rizman, Nina Trivić
+
+
 # NLP Course Project Repository
 
 This repository is organized for Submission 1 of the university Natural Language Processing course. It is structured as a clean workspace for project selection, dataset documentation, and initial corpus analysis.

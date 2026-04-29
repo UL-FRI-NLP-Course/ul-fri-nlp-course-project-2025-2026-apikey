@@ -42,7 +42,7 @@ The project uses:
 │
 ├── data/
 │   ├── raw/
-│   │   └── megaGymDataset.csv
+│   │   └── (place megaGymDataset.csv here after downloading)
 │   └── README.md
 │
 ├── report/
@@ -119,10 +119,16 @@ pip install torchvision
 
 The project requires a running local Qdrant instance.
 
-The easiest way is Docker:
+Use the provided Docker Compose setup (recommended, pinned version with persistent storage):
 
 ```bash
-docker run -p 6333:6333 qdrant/qdrant
+docker compose up -d
+```
+
+If you prefer a one-off container without Compose:
+
+```bash
+docker run -p 6333:6333 qdrant/qdrant:v1.13.4
 ```
 
 Qdrant will then be available at:
@@ -137,7 +143,7 @@ http://localhost:6333
 
 This project uses the MegaGym Exercise Dataset.
 
-The dataset is included in:
+Download the dataset from the original source and place it at:
 
 data/raw/megaGymDataset.csv
 
@@ -199,7 +205,7 @@ Example questions:
 1. User asks a question
 2. Question is embedded using Sentence Transformers
 3. Qdrant retrieves the most relevant exercise entries
-4. Retrieved context is passed to Gemma
+4. Retrieved context is passed to Llama 3.1 (via Ollama)
 5. Final answer is generated using grounded context
 
 This improves factual consistency compared to using the LLM alone.

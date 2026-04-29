@@ -47,7 +47,7 @@ st.markdown(
 
 with st.sidebar:
     st.header("Project Info")
-    st.write("**Model:** Llama 3.1 8B")
+    st.write(f"**Model:** {OLLAMA_MODEL}")
     st.write("**Vector DB:** Qdrant")
     st.write("**Dataset:** MegaGym Exercise Dataset")
     st.write("**Method:** Retrieval-Augmented Generation")
@@ -96,14 +96,23 @@ if question:
         st.write(question)
 
     with st.chat_message("assistant"):
-        with st.spinner("Retrieving relevant exercises..."):
-            context = rag.retrieve_context(question)
-            prompt = build_prompt(question, context)
-            answer = ask_ollama(prompt)
+        context = ""
+        try:
+            with st.spinner("Retrieving relevant exercises..."):
+                context = rag.retrieve_context(question)
+                prompt = build_prompt(question, context)
+                answer = ask_ollama(prompt)
 
-        st.write(answer)
+            st.write(answer)
 
-        with st.expander("Retrieved context"):
-            st.text(context)
+            with st.expander("Retrieved context"):
+                st.text(context)
+        except Exception as exc:
+            answer = (
+                "Sorry, I ran into a problem while retrieving relevant exercises or "
+                "generating a response. Please try again."
+            )
+            st.error(f"{answer} Error details: {exc}")
+            st.write(answer)
 
     st.session_state.messages.append({"role": "assistant", "content": answer})

@@ -1,26 +1,45 @@
-# src/index_megagym.py
+# scripts/index_megagym.py
 
+import os
 import pandas as pd
 from sentence_transformers import SentenceTransformer
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams, PointStruct
 from pathlib import Path
+from src.config import COLLECTION_NAME, EMBEDDING_MODEL, QDRANT_HOST, QDRANT_PORT
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DATA_PATH = PROJECT_ROOT / "data" / "raw" / "megaGymDataset.csv"
-COLLECTION_NAME = "megagym_exercises"
 
 df = pd.read_csv(DATA_PATH).fillna("")
 
-model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
-client = QdrantClient(host="localhost", port=6333)
+model = SentenceTransformer(EMBEDDING_MODEL)
+client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
 
-client.recreate_collection(
-    collection_name=COLLECTION_NAME,
-    vectors_config=VectorParams(size=384, distance=Distance.COSINE),
-)
+FORCE_RECREATE_COLLECTION = os.getenv("FORCE_RECREATE_COLLECTION", "false").lower() in {
+    "1",
+    "true",
+    "yes",
+}
+vector_params = VectorParams(size=384, distance=Distance.COSINE)
 
-points = []
+if FORCE_RECREATE_COLLECTION:
+    client.recreate_collection(
+        collection_name=COLLECTION_NAME,
+        vectors_config=vector_params,
+    )
+elif not client.collection_exists(collection_name=COLLECTION_NAME):
+    client.create_collection(
+        collection_name=COLLECTION_NAME,
+        vectors_config=vector_params,
+    )
+
+EMBED_BATCH_SIZE = 64
+UPSERT_CHUNK_SIZE = 512
+
+texts = []
+payloads = []
+ids = []
 
 for idx, row in df.iterrows():
     text = f"""
@@ -33,27 +52,30 @@ Difficulty level: {row["Level"]}
 Rating: {row["Rating"]}
 Rating description: {row["RatingDesc"]}
 """
-
-    vector = model.encode(text).tolist()
-
-    points.append(
-        PointStruct(
-            id=int(idx),
-            vector=vector,
-            payload={
-                "title": row["Title"],
-                "description": row["Desc"],
-                "type": row["Type"],
-                "body_part": row["BodyPart"],
-                "equipment": row["Equipment"],
-                "level": row["Level"],
-                "rating": row["Rating"],
-                "rating_desc": row["RatingDesc"],
-                "text": text,
-            },
-        )
+    texts.append(text)
+    ids.append(int(idx))
+    payloads.append(
+        {
+            "title": row["Title"],
+            "description": row["Desc"],
+            "type": row["Type"],
+            "body_part": row["BodyPart"],
+            "equipment": row["Equipment"],
+            "level": row["Level"],
+            "rating": row["Rating"],
+            "rating_desc": row["RatingDesc"],
+            "text": text,
+        }
     )
 
-client.upsert(collection_name=COLLECTION_NAME, points=points)
+vectors = model.encode(texts, batch_size=EMBED_BATCH_SIZE, show_progress_bar=True)
 
-print(f"Indexed {len(points)} exercises.")
+for start in range(0, len(ids), UPSERT_CHUNK_SIZE):
+    end = start + UPSERT_CHUNK_SIZE
+    chunk_points = [
+        PointStruct(id=ids[i], vector=vectors[i].tolist(), payload=payloads[i])
+        for i in range(start, min(end, len(ids)))
+    ]
+    client.upsert(collection_name=COLLECTION_NAME, points=chunk_points)
+
+print(f"Indexed {len(ids)} exercises.")

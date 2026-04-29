@@ -1,72 +1,208 @@
-# Domain-Specific Fitness NLP Assistant Using Retrieval-Augmented Generation
+# Domain-Specific Fitness NLP Assistant Using Retrieval-Augmented Generation (RAG)
 
+**Authors:**
+Domen Pahole,
+Luka Rizman,
+Nina Trivić
 
-Domen Pahole, Luka Rizman, Nina Trivić
+---
 
+# Project Overview
 
-# NLP Course Project Repository
+This project is a domain-specific AI fitness assistant built for the Natural Language Processing course.
 
-This repository is organized for Submission 1 of the university Natural Language Processing course. It is structured as a clean workspace for project selection, dataset documentation, and initial corpus analysis.
+The goal is to create a conversational assistant specialized in fitness knowledge, capable of answering questions about:
 
-## Project Scope
+* exercises
+* workout techniques
+* muscle groups
+* equipment usage
+* training recommendations
+* basic fitness guidance
 
-The repository currently supports the first project milestone:
+Instead of relying only on a general-purpose LLM, the system uses **Retrieval-Augmented Generation (RAG)** to retrieve relevant exercise information from a structured fitness dataset and provide more grounded, domain-specific answers.
 
-- project selection and framing
-- dataset discovery and documentation
-- simple corpus analysis on small local samples
-- reproducible documentation for the first milestone
-- clean separation between report and data
+The project uses:
 
-Replace the placeholder dataset entries in [data/README.md](data/README.md) with the exact datasets chosen by your team.
+* **Qdrant** as a vector database
+* **Sentence Transformers** for embeddings
+* **Llama 3.1-8b** (via Ollama) as the language model
+* **Streamlit** for the chat interface
 
-## Repository Structure
+---
+
+# Repository Structure
 
 ```text
 .
+├── .streamlit/
+│   └── config.toml
+│
+├── .venv/
+│
 ├── data/
 │   ├── raw/
-│   ├── samples/
-│   ├── processed/
+│   │   └── megaGymDataset.csv
 │   └── README.md
+│
 ├── report/
-│   ├── fig/
-│   ├── report.tex
-│   ├── report.pdf
+│   ├── code/
+│   ├── ds_report.cls
+│   ├── logo.png
 │   ├── report.bib
-│   └── ds_report.cls
+│   ├── report.pdf
+│   └── report.tex
+│
+├── scripts/
+│   └── index_megagym.py
+│
+├── src/
+│   ├── config.py
+│   ├── llm.py
+│   └── rag.py
+│
+├── .gitignore
+├── app.py
+├── docker-compose.yml
+├── LICENSE
 ├── README.md
-└── LICENSE
+└── requirements.txt
 ```
 
-## Dataset Links
 
-Dataset documentation lives in [data/README.md](data/README.md). That file should be treated as the authoritative source for:
+---
 
-- dataset names
-- official links
-- licensing constraints
-- motivation for dataset selection
-- notes on whether only metadata or small samples are stored locally
+# Installation
 
-## Reproducibility
+## 1. Clone the repository
 
-1. Document the selected datasets in [data/README.md](data/README.md).
-2. Store only tiny sample files in `data/samples/`.
-3. Record any manual download or preprocessing steps in the report and data documentation.
+```bash
+git clone <your-repository-url>
+cd ul-fri-nlp-course-project-2025-2026-apikey
+```
 
-## Corpus Analysis Workflow
+---
 
-The initial analysis pipeline is:
+## 2. Create virtual environment
 
-1. document candidate datasets in [data/README.md](data/README.md)
-2. place a small representative sample in `data/samples/`
-3. compute and summarize corpus statistics
-4. report findings in the written submission
+### Windows
 
-## Expected Pipeline
+```bash
+python -m venv .venv
+.venv\Scripts\activate
+```
 
-- raw data references and metadata in `data/raw/`
-- lightweight analysis samples in `data/samples/`
-- cleaned intermediate outputs in `data/processed/`
-- narrative reporting in `report/`
+### Linux / macOS
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+---
+
+## 3. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+If `torchvision` is missing when running Streamlit:
+
+```bash
+pip install torchvision
+```
+
+---
+
+## 4. Start Qdrant
+
+The project requires a running local Qdrant instance.
+
+The easiest way is Docker:
+
+```bash
+docker run -p 6333:6333 qdrant/qdrant
+```
+
+Qdrant will then be available at:
+
+```text
+http://localhost:6333
+```
+
+---
+
+## Dataset
+
+This project uses the MegaGym Exercise Dataset.
+
+The dataset is included in:
+
+data/raw/megaGymDataset.csv
+
+License: CC0 (Public Domain)
+
+Original source:
+https://www.kaggle.com/datasets/niharika41298/gym-exercise-data
+---
+
+# Indexing the Dataset
+
+Before using the assistant, the dataset must be embedded and stored in Qdrant.
+
+Run:
+
+```bash
+python scripts/index_megagym.py
+```
+
+This will:
+
+* read the dataset
+* generate embeddings
+* create the Qdrant collection
+* upload all exercise vectors
+
+Expected output:
+
+```text
+Indexed XXXX exercises.
+```
+
+This step only needs to be done once.
+
+---
+
+# Running the Application
+
+## Streamlit UI (recommended)
+
+Run:
+
+```bash
+streamlit run app.py
+```
+
+This opens a browser-based chat interface where users can ask fitness-related questions.
+
+Example questions:
+
+* What exercises can I do for chest with dumbbells?
+* How do I perform a Romanian deadlift correctly?
+* What are good beginner back exercises?
+
+---
+
+# Example RAG Workflow
+
+1. User asks a question
+2. Question is embedded using Sentence Transformers
+3. Qdrant retrieves the most relevant exercise entries
+4. Retrieved context is passed to Gemma
+5. Final answer is generated using grounded context
+
+This improves factual consistency compared to using the LLM alone.
+
+---
+

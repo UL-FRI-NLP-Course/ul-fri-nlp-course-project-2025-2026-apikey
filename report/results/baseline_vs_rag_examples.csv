@@ -1,0 +1,385 @@
+id,question,baseline_answer,rag_answer,retrieved_context
+chest_dumbbell,What chest exercises can I do with dumbbells?,"There are several effective chest exercises that can be done using dumbbells. Here are some popular ones:
+
+1. **Dumbbell Bench Press**: Lie on a flat surface or bench and hold the dumbbells over your chest. Lower the dumbbells to your sides until they almost touch your ribcage, then press upwards back to the starting position.
+2. **Dumbbell Flyes**: Sit on the edge of a bench or chair with your feet planted firmly on the ground. Hold the dumbbells and raise them out to the sides until they are at shoulder height, keeping your arms straight.
+3. **Dumbbell Dips (incline or decline)**: Use a set of dumbbells and perform incline or decline dips by sitting on an inclined or declined surface with your feet planted firmly on the ground.
+4. **Dumbbell Chest Press**: Stand or sit with the dumbbells at shoulder height, then press them forward until they are fully extended in front of you.
+
+Remember to start with lighter weights and progress gradually as you build strength and confidence! It's also essential to focus on proper form and technique throughout each exercise.","Based on the retrieved exercise database entries, here are some exercises that match your question:
+
+1. **Dumbbell Chest Fly**
+	* Why it matches: Body part = Chest, Equipment = Dumbbell
+	* Short explanation: Isolates the chest muscles by stretching and contracting them while limiting shoulder involvement.
+	* Difficulty level: Intermediate
+2. **Dumbbell Bench Press-**
+	* Why it matches: Body part = Chest, Equipment = Dumbbell
+	* Short explanation: A classic move for building a bigger, stronger chest, often performed in lower or higher rep ranges.
+	* Difficulty level: Intermediate
+3. **Dumbbell Flyes**
+	* Why it matches: Body part = Chest, Equipment = Dumbbell
+	* Short explanation: Similar to the dumbbell chest fly, this exercise targets the pectoral muscles with a consistent elbow angle.
+	* Difficulty level: Intermediate
+4. **Incline Dumbbell Flyes**
+	* Why it matches: Body part = Chest, Equipment = Dumbbell
+	* Short explanation: Targets the upper chest and is typically used for aesthetic goals with high reps and less weight than an incline press.
+	* Difficulty level: Intermediate
+
+Note that there are duplicates or near-duplicates in the database (e.g., ""Dumbbell Flyes"" and ""Dumbbell Chest Fly""). I have removed these duplicates to provide a list of unique exercises.","
+Exercise: Dumbbell chest fly
+Description: The dumbbell chest fly is a popular exercise that targets the pectoral or chest muscles. It attempts to isolate the chest muscles, stretching and contracting them while limiting involvement of the shoulders. Unlike a press, where the elbows bend and flex, flyes should keep a relatively consistent elbow angle. The motion is sometimes compared to ""hugging a tree."" Dumbbell flyes are usually performed for moderate to high reps, such as 8-12 reps per set or more, as part of a chest or upper-body focused workout.
+Type: Strength
+Body part: Chest
+Equipment: Dumbbell
+Difficulty level: Intermediate
+Rating: 
+Rating description: 
+
+
+
+Exercise: Dumbbell bench press-
+Description: The dumbbell bench press is a mainstay of lifters worldwide. It's a classic move for building a bigger, stronger chest and triceps. It's often placed first in mass-building chest workouts, but can also be utilized as an accessory movement for the barbell bench press in strength training. It can be performed in lower strength-focused rep ranges, or for higher reps to build muscle.
+Type: Strength
+Body part: Chest
+Equipment: Dumbbell
+Difficulty level: Intermediate
+Rating: 
+Rating description: 
+
+
+
+Exercise: Dumbbell Flyes
+Description: The dumbbell chest fly is a popular exercise that targets the pectoral or chest muscles. It attempts to isolate the chest muscles, stretching and contracting them while limiting involvement of the shoulders. Unlike a press, where the elbows bend and flex, flyes should keep a relatively consistent elbow angle. The motion is sometimes compared to ""hugging a tree."" Dumbbell flyes are usually performed for moderate to high reps, such as 8-12 reps per set or more, as part of a chest or upper-body focused workout.
+Type: Strength
+Body part: Chest
+Equipment: Dumbbell
+Difficulty level: Intermediate
+Rating: 9.1
+Rating description: Average
+
+
+
+Exercise: Dumbbell Chest Press - Gethin Variation
+Description: The dumbbell bench press is a mainstay of workout enthusiasts worldwide. It’s a classic move for building a bigger, stronger chest. As such, it’s often placed first in mass-building chest workouts.
+Type: Strength
+Body part: Chest
+Equipment: Dumbbell
+Difficulty level: Intermediate
+Rating: 
+Rating description: 
+
+
+
+Exercise: Incline Dumbbell Flyes
+Description: The incline dumbbell chest fly is an upper body isolation exercise targeting the upper chest and is typically used with aesthetic goals in mind. It will require less weight than an incline press, which makes it a great hypertrophy exercise with high reps.
+Type: Strength
+Body part: Chest
+Equipment: Dumbbell
+Difficulty level: Intermediate
+Rating: 8.8
+Rating description: Average
+"
+triceps_cable,Which triceps exercises use a cable machine?,"Two common triceps exercises that use a cable machine are:
+
+1. Cable Tricep Pushdowns
+2. Cable Overhead Tricep Extensions","Here are the exercise matches for the question:
+
+1. **Cable Overhead Triceps Extension - Gethin Variation**
+Why it matches: Cable equipment, targets triceps.
+Short explanation: Isolation exercise performed with a cable to target the triceps muscles.
+Difficulty level: Intermediate
+
+2. **Lying cable triceps extension**
+Why it matches: Cable equipment, targets triceps.
+Short explanation: Isolation exercise performed lying on a bench or floor using a cable to target the triceps muscles.
+Difficulty level: Intermediate
+
+3. **Triceps Overhead Extension with Rope - Gethin Variation**
+Why it matches: Cable equipment, targets triceps.
+Short explanation: Isolation exercise performed with a cable and rope to target the triceps muscles.
+Difficulty level: Intermediate
+
+4. **Cable Triceps Extension - Gethin Variation**
+Why it matches: Cable equipment, targets triceps.
+Short explanation: Popular isolation exercise targeting the triceps muscles using a cable.
+Difficulty level: Intermediate
+
+5. **30 Arms Underhand Cable Straight-Bar Push-Down**
+Why it matches: Cable equipment, targets triceps.
+Short explanation: Strength exercise targeting the triceps muscles with an underhand grip and straight-bar on a cable machine.
+Difficulty level: Intermediate","
+Exercise: Cable Overhead Triceps Extension - Gethin Variation
+Description: The overhead triceps extension is an isolation exercise that is performed with a cable. It is usually performed for moderate to high reps as part of the arm-focused portion of a workout.
+Type: Strength
+Body part: Triceps
+Equipment: Cable
+Difficulty level: Intermediate
+Rating: 
+Rating description: 
+
+
+
+Exercise: Lying cable triceps extension
+Description: The lying cable triceps extension is an isolation exercise performed lying on either a bench or the floor. This movement is usually performed for moderate to high reps for a burn and pump as part of an arm-focused workout.
+Type: Strength
+Body part: Triceps
+Equipment: Cable
+Difficulty level: Intermediate
+Rating: 8.6
+Rating description: Average
+
+
+
+Exercise: Triceps Overhead Extension with Rope - Gethin Variation
+Description: The overhead triceps extension is an isolation exercise that is performed with a cable. It is usually performed for moderate to high reps as part of the arm-focused portion of a workout.
+Type: Strength
+Body part: Triceps
+Equipment: Cable
+Difficulty level: Intermediate
+Rating: 
+Rating description: 
+
+
+
+Exercise: Cable Triceps Extension - Gethin Variation
+Description: The cable rope push-down is a popular exercise targeting the triceps muscles. It's easy to learn and perform, making it a favorite for everyone from beginners to advanced lifters. It is usually performed for moderate to high reps, such as 8-12 reps or more per set, as part of an upper-body or arm-focused workout.The cable rope push-down is a popular exercise targeting the triceps muscles. It's easy to learn and perform, making it a favorite for everyone from beginners to advanced lifters. It is usually performed for moderate to high reps, such as 8-12 reps or more per set, as part of an upper-body or arm-focused workout.
+Type: Strength
+Body part: Triceps
+Equipment: Cable
+Difficulty level: Intermediate
+Rating: 
+Rating description: 
+
+
+
+Exercise: 30 Arms Underhand Cable Straight-Bar Push-Down
+Description: 
+Type: Strength
+Body part: Triceps
+Equipment: Cable
+Difficulty level: Intermediate
+Rating: 
+Rating description: 
+"
+beginner_bodyweight_legs,Give me beginner leg exercises using bodyweight.,"Here are some effective beginner-friendly leg exercises that can be done with your own body weight:
+
+1. **Squats**: Stand with feet shoulder-width apart, then bend knees and lower your body down until thighs are parallel to the ground. Push back up to starting position.
+2. **Lunges**: Stand with feet together, take a large step forward with one foot, and lower your body down until back knee almost touches the ground. Alternate legs.
+3. **Glute Bridges**: Lie on your back with knees bent and feet flat on the ground. Lift hips up towards ceiling, squeezing glutes at the top.
+4. **Calf Raises**: Stand on the edge of a step or curb with heels hanging off. Raise up onto tiptoes, then lower back down.
+5. **Wall Sits**: Stand with back against a wall and feet shoulder-width apart. Slide back down into a seated position, keeping knees bent at 90 degrees.
+
+Remember to start slow, focus on proper form, and gradually increase the number of repetitions as you build strength!","Based on the retrieved exercise database entries, here are some beginner leg exercises that use body weight:
+
+1. **Alternating Leg Swing**
+	* Why it matches: Body part is Hamstrings and Equipment is Body Only (no equipment required)
+	* Short explanation: This exercise targets the hamstrings by swinging one leg while keeping the other foot on the ground.
+	* Difficulty level: Beginner
+2. **Alternate Leg Diagonal Bound**
+	* Why it matches: Body part is Quadriceps, Equipment is None, and Difficulty level is Beginner
+	* Short explanation: This plyometric exercise involves jumping up and landing with a diagonal movement, targeting the quadriceps muscles.
+3. **Single-leg leg extension- (Note: The equipment listed is ""Machine"", but since you asked for bodyweight exercises, I'll exclude this one)**","
+Exercise: Alternate Leg Diagonal Bound
+Description: 
+Type: Plyometrics
+Body part: Quadriceps
+Equipment: 
+Difficulty level: Beginner
+Rating: 6.9
+Rating description: Average
+
+
+
+Exercise: 30 Flat Bench Leg Raise
+Description: The lying leg lift is a popular bodyweight exercise targeting the muscles of the abs, the rectus abdominis or “six-pack” muscles in particular. It can be performed for time or reps in the core-focused portion of any workout.
+Type: Strength
+Body part: Abdominals
+Equipment: Body Only
+Difficulty level: Intermediate
+Rating: 
+Rating description: 
+
+
+
+Exercise: Alternating Leg Swing
+Description: 
+Type: Stretching
+Body part: Hamstrings
+Equipment: Body Only
+Difficulty level: Beginner
+Rating: 0.0
+Rating description: 
+
+
+
+Exercise: Single Leg Push-off
+Description: 
+Type: Plyometrics
+Body part: Quadriceps
+Equipment: Other
+Difficulty level: Beginner
+Rating: 9.2
+Rating description: Average
+
+
+
+Exercise: Single-leg leg extension-
+Description: The single-leg leg extension is a popular machine-based exercise for the legs, particularly the quadriceps. It is usually performed for moderate to high reps, such as 8-12 reps per set or more, as part of a leg pre-exhaust or as a muscle-building movement for lower-body training. Performing it one leg a time allows you to focus on the mind-muscle connection of each leg and address muscle imbalances.
+Type: Strength
+Body part: Hamstrings
+Equipment: Machine
+Difficulty level: Intermediate
+Rating: 
+Rating description: 
+"
+pullup_bar_back,Which back exercises can I do with a pull-up bar?,"With a pull-up bar, you have several options for effective back exercises. Here are some of them:
+
+1. **Pull-ups**: This is one of the most efficient exercises for building lat muscles and overall upper body strength.
+2. **Lat Pulldowns**: While this exercise typically involves a machine, if your gym has a resistance band attachment on their pull-up bar or you use a towel, you can perform a variation that targets your lats.
+3. **Chin-ups**: Similar to pull-ups, but with the emphasis shifted slightly towards the upper body and biceps.
+
+If you have any specific goals (like targeting a particular muscle group) or if you'd like variations for beginners, feel free to ask!","Here are the back exercises that match your question and can be done with a pull-up bar:
+
+1. **Around-the-world pull-up**
+	* Why it matches: It's an exercise specifically performed on a pull-up bar.
+	* Short explanation: A more advanced version of the classic pull-up, focusing stress directly on the individual arms or sides of the back.
+	* Difficulty level: Beginner
+2. **Upside-down pull-up**
+	* Why it matches: It's an exercise normally performed on a pair of gymnastic rings, but can also be done with a pull-up bar (with modifications).
+	* Short explanation: An advanced bodyweight exercise that targets the lats, biceps, and core.
+	* Difficulty level: Intermediate
+3. **Pull-up** (not explicitly listed in the database, but implied by other exercises)
+	* Why it matches: It's a basic exercise performed on a pull-up bar, targeting the same muscles as the upside-down pull-up and around-the-world pull-up.
+	* Short explanation: A classic upper body exercise that targets the lats, biceps, and core.
+
+Note: Unfortunately, we don't have enough information to provide more exercises.","
+Exercise: Upside-down pull-up
+Description: The upside-down pull-up is an advanced bodyweight exercise that is normally performed on a pair of gymnastic rings. It involves pulling the body toward the ceiling in an inverted position. It targets the same muscles as traditional pull-ups, including the lats (latissimus dorsi), biceps, and core. However, the pulling angle is more akin to a bent-over row or upright row, depending on the angle of your hips.
+Type: Strength
+Body part: Middle Back
+Equipment: Other
+Difficulty level: Intermediate
+Rating: 8.8
+Rating description: Average
+
+
+
+Exercise: UP Squat
+Description: The barbell back squat is a popular compound movement that emphasizes building the lower-body muscle groups and overall strength. It's the classic way to start a leg day, and is a worthy centerpiece to a lower-body training program. The squat is a competitive lift in the sport of powerlifting, but is also a classic measurement of lower-body strength. With the barbell racked on the traps or upper back, the emphasis is placed on the posterior chain but the entire body gets worked. The back squat can be trained in everything from heavy singles to sets of 20 reps or higher.
+Type: Strength
+Body part: Quadriceps
+Equipment: Barbell
+Difficulty level: Intermediate
+Rating: 
+Rating description: 
+
+
+
+Exercise: Around-the-world pull-up
+Description: The around-the-world pull-up is a more advanced version of the classic pull-up. It focuses stress more directly on the individual arms or sides of the back, while also boosting the time under tension at the top of each rep. It can be used as a progression toward a one-arm pull-up, or simply as a way to increase the challenge and variety of your pull-up training.
+Type: Strength
+Body part: Lats
+Equipment: Other
+Difficulty level: Beginner
+Rating: 0.0
+Rating description: 
+
+
+
+Exercise: Barbell press sit-up
+Description: The barbell press sit-up is a weighted exercise focusing on the abdominal muscles, as well as the shoulders to a lesser degree. It primarily targets the rectus abdominis or ""six-pack"" muscles, but also involves the obliques and deep core muscles. It can be performed on the floor with the feet anchored or unanchored, or on a decline or other bench. It is similar to the Otis-up, which is performed with a weight plate.
+Type: Strength
+Body part: Abdominals
+Equipment: Other
+Difficulty level: Intermediate
+Rating: 
+Rating description: 
+
+
+
+Exercise: 30 Back Straight-Arm Bar Pull-Down
+Description: 
+Type: Strength
+Body part: Middle Back
+Equipment: Cable
+Difficulty level: Intermediate
+Rating: 
+Rating description: 
+"
+biceps_barbell,Show me barbell exercises for biceps.,"Here are some effective barbell exercises for building strong and toned biceps:
+
+1. **Barbell Bicep Curls**: Stand with your feet shoulder-width apart, grip the barbell with an underhand grip (palms facing towards you), and curl the weight up to your shoulders.
+2. **Incline Barbell Bicep Curls**: Sit on an incline bench and hold the barbell with an underhand grip. Curl the weight up to your shoulders, squeezing your biceps at the top of the movement.
+3. **Barbell Preacher Curls**: Sit on a preacher curl bench and hold the barbell with an underhand grip. Curl the weight up to your shoulders, focusing on the contraction in your biceps.
+
+Remember to start with lighter weights and gradually increase the load as you build strength and endurance. It's also essential to warm up before each workout and stretch after each exercise to prevent injury.
+
+Do you have any specific questions about these exercises or would you like to know more?","Here are the barbell exercises that match your request:
+
+1. **Preacher Curl**
+Why it matches: Barbell, Biceps
+Short explanation: Isolation exercise for building bigger biceps.
+Difficulty level: Intermediate
+
+2. **Barbell curl**
+Why it matches: Barbell, Biceps
+Short explanation: Builds sleeve-popping biceps and allows heavier loading than many other curl variations.
+Difficulty level: Intermediate
+
+3. **Paul Carter Barbell Curl**
+Why it matches: Barbell, Biceps
+Short explanation: Helps build bigger biceps and allows heavier loading than many other curl variations.
+Difficulty level: Intermediate","
+Exercise: Preacher Curl
+Description: The EZ-bar preacher curl is a classic exercise for building bigger biceps. This move is all about isolation. With the back of the upper arms against the pad, it’s next to impossible to cheat. Go light, get a great pump, and build that peak!
+Type: Strength
+Body part: Biceps
+Equipment: Barbell
+Difficulty level: Intermediate
+Rating: 8.8
+Rating description: Average
+
+
+
+Exercise: Paul Carter Barbell Curl
+Description: The barbell curl is an arm exercise that is also one of the most recognizable movements in all of bodybuilding and fitness. It helps build sleeve-popping biceps and allows heavier loading than many other curl variations. It is usually performed in moderate to high reps, such as 8-12 reps per set, as part of the arm-focused portion of any workout.
+Type: Strength
+Body part: Biceps
+Equipment: Barbell
+Difficulty level: Intermediate
+Rating: 
+Rating description: 
+
+
+
+Exercise: Barbell curl-
+Description: The barbell curl is an arm exercise that is also one of the most recognizable movements in all of bodybuilding and fitness. It helps build sleeve-popping biceps and allows heavier loading than many other curl variations. It is usually performed in moderate to high reps, such as 8-12 reps per set, as part of the arm-focused portion of any workout.
+Type: Strength
+Body part: Biceps
+Equipment: Barbell
+Difficulty level: Intermediate
+Rating: 
+Rating description: 
+
+
+
+Exercise: Barbell Curl
+Description: The barbell curl is an arm exercise that is also one of the most recognizable movements in all of bodybuilding and fitness. It helps build sleeve-popping biceps and allows heavier loading than many other curl variations. It is usually performed in moderate to high reps, such as 8-12 reps per set, as part of the arm-focused portion of any workout.
+Type: Strength
+Body part: Biceps
+Equipment: Barbell
+Difficulty level: Intermediate
+Rating: 9.0
+Rating description: Average
+
+
+
+Exercise: Biceps curl to shoulder press
+Description: The biceps curl to shoulder press is a dumbbell complex that combines two exercises that build and strengthen the biceps and shoulders or deltoids. It is usually performed one rep of each movement at a time, although you could perform more reps of each, or increase the reps in successive rounds (e.g., 1 rep in round 1, 2 reps in round 2, etc.). No matter how you structure the sets and reps, it is a time-efficient way to hit two crucial upper-body muscles in any workout.
+Type: Strength
+Body part: Biceps
+Equipment: Dumbbell
+Difficulty level: Beginner
+Rating: 9.1
+Rating description: Average
+"

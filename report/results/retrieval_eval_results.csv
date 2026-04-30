@@ -1,0 +1,183 @@
+Dejanski izpis: 
+
+query_id,question,hit_at_1,hit_at_3,hit_at_5,precision_at_5,reciprocal_rank,top_titles
+chest_dumbbell,What chest exercises can I do with dumbbells?,True,True,True,1.0,1.0,Dumbbell chest fly; Dumbbell bench press-; Dumbbell Flyes; Dumbbell Chest Press - Gethin Variation; Incline Dumbbell Flyes
+triceps_cable,Which triceps exercises use a cable machine?,True,True,True,0.8,1.0,Cable Overhead Triceps Extension - Gethin Variation; Lying cable triceps extension; Triceps Overhead Extension with Rope - Gethin Variation; Cable Triceps Extension - Gethin Variation; 30 Arms Underhand Cable Straight-Bar Push-Down
+beginner_bodyweight_legs,Give me beginner leg exercises using bodyweight.,False,False,False,0.0,0.0,Alternate Leg Diagonal Bound; 30 Flat Bench Leg Raise; Alternating Leg Swing; Single Leg Push-off; Single-leg leg extension-
+pullup_bar_back,Which back exercises can I do with a pull-up bar?,True,True,True,0.4,1.0,Upside-down pull-up; UP Squat; Around-the-world pull-up; Barbell press sit-up; 30 Back Straight-Arm Bar Pull-Down
+biceps_barbell,Show me barbell exercises for biceps.,True,True,True,0.8,1.0,Preacher Curl; Paul Carter Barbell Curl; Barbell curl-; Barbell Curl; Biceps curl to shoulder press
+abs_ball,What abdominal exercises use an exercise ball?,False,True,True,0.4,0.3333333333333333,Exercise Ball Cable Crunch - Gethin Variation; Exercise Ball Cable Crunch - Gethin Variation; Exercise ball crunch; AM Ball Crunch; Exercise ball torso rotation
+shoulders_dumbbell,Give me dumbbell shoulder exercises.,True,True,True,1.0,1.0,Dumbbell front raise to lateral raise; Alternating dumbbell front raise; Dumbbell shoulder press with body rotation; Dumbbell external shoulder rotation; Dumbbell lateral raise
+hamstrings_machine,What machine exercises target hamstrings?,True,True,True,0.6,1.0,Lying Hamstring Curls - Gethin Variation; UP Hamstring Curl; Total Fitness Hamstring Slide; Hamstring slide; Seated Hamstring Curl - Gethin Variation
+calves_beginner,Which beginner calf exercises can I do?,False,True,True,0.6,0.5,Standing Dumbbell Calf Raise; Calf Stretch Elbows Against Wall; Single-leg standing dumbbell calf raise; Calf Press; Calf Raises - With Bands
+lower_back_bodyweight,What bodyweight exercises target the lower back?,False,True,True,0.6,0.5,Lower Back Stretch - Yates Variation; Back Extension - Gethin Variation; Back extension; Weighted back extension; Lying cross-over lower back stretch
+chest_bands,What chest exercises can be done with resistance bands?,False,True,True,0.6,0.5,Cross Over - With Bands; Band chest fly; HM Banded Cross-Over Pull; Band push-up; Taylor Band-Assisted One-Arm Push-Up
+quadriceps_barbell,Suggest barbell exercises for quadriceps.,False,True,True,0.2,0.5,Barbell step-up; Close-stance dumbbell front squat; Barbell squat with plate slide; Standing quad stretch; Jumping jack-
+
+
+Lepši izpis zgornjega:
+
+
+----------------------------------------------------------------------
+           Rezultati evalvacije iskanja vadb ("retrieval eval results")
+----------------------------------------------------------------------
+
+1. Vprašanje: Kajšne vaje za prsa lahko izvajam z ročkami?
+   Najdene vaje:
+      • Dumbbell chest fly
+      • Dumbbell bench press
+      • Dumbbell Flyes
+      • Dumbbell Chest Press - Gethin Variation
+      • Incline Dumbbell Flyes
+   Ujemanje pri top 1 / 3 / 5: DA / DA / DA
+   Preciznost (top 5): 1.0
+   Recipročna rangirana vrednost: 1.0
+
+----------------------------------------------------------------------
+2. Vprašanje: Katere triceps vaje se izvajajo na 'cable' napravi?
+   Najdene vaje:
+      • Cable Overhead Triceps Extension - Gethin Variation
+      • Lying cable triceps extension
+      • Triceps Overhead Extension with Rope - Gethin Variation
+      • Cable Triceps Extension - Gethin Variation
+      • 30 Arms Underhand Cable Straight-Bar Push-Down
+   Ujemanje pri top 1 / 3 / 5: DA / DA / DA
+   Preciznost (top 5): 0.8
+   Recipročna rangirana vrednost: 1.0
+
+----------------------------------------------------------------------
+3. Vprašanje: Katere začetniške vaje za noge lahko izvajam z lastno težo?
+   Najdene vaje:
+      • Alternate Leg Diagonal Bound
+      • 30 Flat Bench Leg Raise
+      • Alternating Leg Swing
+      • Single Leg Push-off
+      • Single-leg leg extension
+   Ujemanje pri top 1 / 3 / 5: NE / NE / NE
+   Preciznost (top 5): 0.0
+   Recipročna rangirana vrednost: 0.0
+
+----------------------------------------------------------------------
+4. Vprašanje: Katere vaje za hrbet lahko izvajam na drogu za dvigovanje?
+   Najdene vaje:
+      • Upside-down pull-up
+      • UP Squat
+      • Around-the-world pull-up
+      • Barbell press sit-up
+      • 30 Back Straight-Arm Bar Pull-Down
+   Ujemanje pri top 1 / 3 / 5: DA / DA / DA
+   Preciznost (top 5): 0.4
+   Recipročna rangirana vrednost: 1.0
+
+----------------------------------------------------------------------
+5. Vprašanje: Katere vaje z utežjo (drogo) so za bicepse?
+   Najdene vaje:
+      • Preacher Curl
+      • Paul Carter Barbell Curl
+      • Barbell curl
+      • Barbell Curl
+      • Biceps curl to shoulder press
+   Ujemanje pri top 1 / 3 / 5: DA / DA / DA
+   Preciznost (top 5): 0.8
+   Recipročna rangirana vrednost: 1.0
+
+----------------------------------------------------------------------
+6. Vprašanje: Katere trebušne vaje vključujejo žogo za vadbo?
+   Najdene vaje:
+      • Exercise Ball Cable Crunch - Gethin Variation
+      • Exercise Ball Cable Crunch - Gethin Variation
+      • Exercise ball crunch
+      • AM Ball Crunch
+      • Exercise ball torso rotation
+   Ujemanje pri top 1 / 3 / 5: NE / DA / DA
+   Preciznost (top 5): 0.4
+   Recipročna rangirana vrednost: 0.33
+
+----------------------------------------------------------------------
+7. Vprašanje: Naštej vaje za ramena z ročkami.
+   Najdene vaje:
+      • Dumbbell front raise to lateral raise
+      • Alternating dumbbell front raise
+      • Dumbbell shoulder press with body rotation
+      • Dumbbell external shoulder rotation
+      • Dumbbell lateral raise
+   Ujemanje pri top 1 / 3 / 5: DA / DA / DA
+   Preciznost (top 5): 1.0
+   Recipročna rangirana vrednost: 1.0
+
+----------------------------------------------------------------------
+8. Vprašanje: Katere vaje na napravah so za zadnje stegenske mišice (hamstrings)?
+   Najdene vaje:
+      • Lying Hamstring Curls - Gethin Variation
+      • UP Hamstring Curl
+      • Total Fitness Hamstring Slide
+      • Hamstring slide
+      • Seated Hamstring Curl - Gethin Variation
+   Ujemanje pri top 1 / 3 / 5: DA / DA / DA
+   Preciznost (top 5): 0.6
+   Recipročna rangirana vrednost: 1.0
+
+----------------------------------------------------------------------
+9. Vprašanje: Katere začetniške vaje za meča lahko izvajam?
+   Najdene vaje:
+      • Standing Dumbbell Calf Raise
+      • Calf Stretch Elbows Against Wall
+      • Single-leg standing dumbbell calf raise
+      • Calf Press
+      • Calf Raises - With Bands
+   Ujemanje pri top 1 / 3 / 5: NE / DA / DA
+   Preciznost (top 5): 0.6
+   Recipročna rangirana vrednost: 0.5
+
+----------------------------------------------------------------------
+10. Vprašanje: Katere vaje z lastno težo so za spodnji del hrbta?
+    Najdene vaje:
+      • Lower Back Stretch - Yates Variation
+      • Back Extension - Gethin Variation
+      • Back extension
+      • Weighted back extension
+      • Lying cross-over lower back stretch
+    Ujemanje pri top 1 / 3 / 5: NE / DA / DA
+    Preciznost (top 5): 0.6
+    Recipročna rangirana vrednost: 0.5
+
+----------------------------------------------------------------------
+11. Vprašanje: Katere vaje za prsa lahko izvajam z elastičnimi trakovi?
+    Najdene vaje:
+      • Cross Over - With Bands
+      • Band chest fly
+      • HM Banded Cross-Over Pull
+      • Band push-up
+      • Taylor Band-Assisted One-Arm Push-Up
+    Ujemanje pri top 1 / 3 / 5: NE / DA / DA
+    Preciznost (top 5): 0.6
+    Recipročna rangirana vrednost: 0.5
+
+----------------------------------------------------------------------
+12. Vprašanje: Predlagaj vaje z drogo za kvadricepse.
+    Najdene vaje:
+      • Barbell step-up
+      • Close-stance dumbbell front squat
+      • Barbell squat with plate slide
+      • Standing quad stretch
+      • Jumping jack
+    Ujemanje pri top 1 / 3 / 5: NE / DA / DA
+    Preciznost (top 5): 0.2
+    Recipročna rangirana vrednost: 0.5
+
+----------------------------------------------------------------------
+
+
+query_id,question,hit_at_1,hit_at_3,hit_at_5,precision_at_5,reciprocal_rank,top_titles
+chest_dumbbell,What chest exercises can I do with dumbbells?,True,True,True,1.0,1.0,Dumbbell chest fly; Dumbbell bench press-; Dumbbell Flyes; Dumbbell Chest Press - Gethin Variation; Incline Dumbbell Flyes
+triceps_cable,Which triceps exercises use a cable machine?,True,True,True,0.8,1.0,Cable Overhead Triceps Extension - Gethin Variation; Lying cable triceps extension; Triceps Overhead Extension with Rope - Gethin Variation; Cable Triceps Extension - Gethin Variation; 30 Arms Underhand Cable Straight-Bar Push-Down
+beginner_bodyweight_legs,Give me beginner leg exercises using bodyweight.,False,False,False,0.0,0.0,Alternate Leg Diagonal Bound; 30 Flat Bench Leg Raise; Alternating Leg Swing; Single Leg Push-off; Single-leg leg extension-
+pullup_bar_back,Which back exercises can I do with a pull-up bar?,True,True,True,0.4,1.0,Upside-down pull-up; UP Squat; Around-the-world pull-up; Barbell press sit-up; 30 Back Straight-Arm Bar Pull-Down
+biceps_barbell,Show me barbell exercises for biceps.,True,True,True,0.8,1.0,Preacher Curl; Paul Carter Barbell Curl; Barbell curl-; Barbell Curl; Biceps curl to shoulder press
+abs_ball,What abdominal exercises use an exercise ball?,False,True,True,0.4,0.3333333333333333,Exercise Ball Cable Crunch - Gethin Variation; Exercise Ball Cable Crunch - Gethin Variation; Exercise ball crunch; AM Ball Crunch; Exercise ball torso rotation
+shoulders_dumbbell,Give me dumbbell shoulder exercises.,True,True,True,1.0,1.0,Dumbbell front raise to lateral raise; Alternating dumbbell front raise; Dumbbell shoulder press with body rotation; Dumbbell external shoulder rotation; Dumbbell lateral raise
+hamstrings_machine,What machine exercises target hamstrings?,True,True,True,0.6,1.0,Lying Hamstring Curls - Gethin Variation; UP Hamstring Curl; Total Fitness Hamstring Slide; Hamstring slide; Seated Hamstring Curl - Gethin Variation
+calves_beginner,Which beginner calf exercises can I do?,False,True,True,0.6,0.5,Standing Dumbbell Calf Raise; Calf Stretch Elbows Against Wall; Single-leg standing dumbbell calf raise; Calf Press; Calf Raises - With Bands
+lower_back_bodyweight,What bodyweight exercises target the lower back?,False,True,True,0.6,0.5,Lower Back Stretch - Yates Variation; Back Extension - Gethin Variation; Back extension; Weighted back extension; Lying cross-over lower back stretch
+chest_bands,What chest exercises can be done with resistance bands?,False,True,True,0.6,0.5,Cross Over - With Bands; Band chest fly; HM Banded Cross-Over Pull; Band push-up; Taylor Band-Assisted One-Arm Push-Up
+quadriceps_barbell,Suggest barbell exercises for quadriceps.,False,True,True,0.2,0.5,Barbell step-up; Close-stance dumbbell front squat; Barbell squat with plate slide; Standing quad stretch; Jumping jack-

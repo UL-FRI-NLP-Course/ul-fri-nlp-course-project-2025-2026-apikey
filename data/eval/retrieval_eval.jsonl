@@ -1,0 +1,83 @@
+// json datoteka predstavlja seznam testnih vprašanj za evalvacijo retrieval komponente
+
+
+// spodaj je seznam vprašanj: 
+
+{
+    "id": "triceps_cable",
+    "question": "Can you recommend some triceps exercises that use a cable machine?",
+    "expected_body_part": ["Triceps"],
+    "expected_equipment": ["Cable"],
+    "expected_keywords": ["extension", "pushdown"]
+}
+{
+    "id": "beginner_bodyweight_legs",
+    "question": "Which bodyweight leg exercises would you suggest for a beginner?",
+    "expected_body_part": ["Quadriceps", "Hamstrings", "Glutes", "Calves"],
+    "expected_equipment": ["Body Only"],
+    "expected_level": ["Beginner"],
+    "expected_keywords": ["squat", "lunge", "calf", "bridge"]
+}
+{
+    "id": "pullup_bar_back",
+    "question": "What back exercises can I perform with a pull-up bar?",
+    "expected_body_part": ["Lats", "Middle Back"],
+    "expected_equipment": ["Body Only", "Other"],
+    "expected_keywords": ["pull", "chin"]
+}
+{
+    "id": "biceps_barbell",
+    "question": "Could you list some barbell exercises that are good for training the biceps?",
+    "expected_body_part": ["Biceps"],
+    "expected_equipment": ["Barbell", "E-Z Curl Bar"],
+    "expected_keywords": ["curl"]
+}
+{
+    "id": "abs_ball",
+    "question": "Can you suggest a few abdominal exercises using an exercise ball?",
+    "expected_body_part": ["Abdominals"],
+    "expected_equipment": ["Exercise Ball"],
+    "expected_keywords": ["crunch", "plank", "rollout"]
+}
+{
+    "id": "shoulders_dumbbell",
+    "question": "What are some effective shoulder exercises I can do with dumbbells?",
+    "expected_body_part": ["Shoulders"],
+    "expected_equipment": ["Dumbbell"],
+    "expected_keywords": ["raise", "press", "rotation"]
+}
+{
+    "id": "hamstrings_machine",
+    "question": "Which machine exercises should I try to strengthen my hamstrings?",
+    "expected_body_part": ["Hamstrings"],
+    "expected_equipment": ["Machine"],
+    "expected_keywords": ["curl", "leg"]
+}
+{
+    "id": "calves_beginner",
+    "question": "Can you recommend some easy calf exercises suitable for beginners?",
+    "expected_body_part": ["Calves"],
+    "expected_level": ["Beginner"],
+    "expected_keywords": ["calf", "raise"]
+}
+{
+    "id": "lower_back_bodyweight",
+    "question": "What bodyweight exercises are effective for the lower back?",
+    "expected_body_part": ["Lower Back"],
+    "expected_equipment": ["Body Only"],
+    "expected_keywords": ["extension", "superman"]
+}
+{
+    "id": "chest_bands",
+    "question": "Which chest exercises can be performed with resistance bands?",
+    "expected_body_part": ["Chest"],
+    "expected_equipment": ["Bands"],
+    "expected_keywords": ["press", "fly", "push"]
+}
+{
+    "id": "quadriceps_barbell",
+    "question": "What are the best barbell exercises for targeting the quadriceps?",
+    "expected_body_part": ["Quadriceps"],
+    "expected_equipment": ["Barbell"],
+    "expected_keywords": ["squat", "lunge"]
+}

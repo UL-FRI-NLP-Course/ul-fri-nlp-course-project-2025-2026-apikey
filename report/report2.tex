@@ -1,0 +1,228 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% FRI NLP Report
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[fleqn,moreauthors,10pt]{ds_report}
+\usepackage[english]{babel}
+\usepackage{hyperref}
+\graphicspath{{fig/}}
+
+\JournalInfo{FRI Natural Language Processing Course 2026}
+\Archive{Project report}
+
+\PaperTitle{
+\begin{center}
+Report 2\\[0.3em]
+Domain-Specific Fitness NLP Assistant Using Retrieval-Augmented Generation
+\end{center}
+}
+\Authors{Domen Pahole (Team leader), Luka Rizman, Nina Trivić}
+
+\affiliation{\textit{Advisors: Aleš Žagar}}
+
+\Keywords{Natural Language Processing, Fitness NLP, Retrieval-Augmented Generation, Semantic Retrieval, Domain Adaptation}
+\newcommand{\keywordname}{Keywords}
+
+\Abstract{
+This project develops a domain-specific NLP assistant for fitness applications. 
+The system leverages structured exercise data to enable semantic retrieval and contextual response generation. 
+This report presents the first implementation results and a comparison between a baseline LLM and a RAG-based approach.
+}
+
+\begin{document}
+\flushbottom
+\maketitle
+\thispagestyle{empty}
+
+\section*{Introduction}
+
+In this report, we will introduce first results of testing our own RAG model in comparison with Llama 3.1 8B model. The topic is Fitness Assistant. 
+
+\section*{Datasets for Current Testing}
+
+For the current phase of testing, we use a single dataset, \texttt{MegaGymDataset.csv}. 
+The dataset contains 2,918 exercise entries with structured metadata describing each exercise.
+
+Each entry includes the following attributes:
+
+\begin{itemize}
+\item \textbf{Title} – name of the exercise
+\item \textbf{Desc} – textual description of how the exercise is performed
+\item \textbf{Type} – category of exercise (e.g. Strength, Cardio)
+\item \textbf{BodyPart} – primary muscle group targeted
+\item \textbf{Equipment} – required equipment
+\item \textbf{Level} – difficulty level (e.g. Beginner, Intermediate, Expert)
+\item \textbf{Rating} – numerical user rating
+\item \textbf{RatingDesc} – textual interpretation of the rating
+\end{itemize}
+
+An example entry from the dataset:
+
+\begin{itemize}
+\item \textbf{Title}: Dumbbell chest fly
+\item \textbf{Desc}: Description of the exercise execution
+\item \textbf{Type}: Strength
+\item \textbf{BodyPart}: Chest
+\item \textbf{Equipment}: Dumbbell
+\item \textbf{Level}: Intermediate
+\end{itemize}
+
+\section*{Results}
+
+In this section we present the first evaluation of our prototype RAG system. 
+The goal is not a full-scale scientific evaluation, but rather to verify whether the core components already provide meaningful improvements over a baseline LLM setup.
+
+We evaluate two aspects separately:
+
+\begin{itemize}
+\item Retrieval quality (vector search in Qdrant)
+\item End-to-end answer quality (Baseline LLM vs RAG)
+\end{itemize}
+
+\section*{Retrieval Evaluation}
+
+We first evaluate only the retrieval component, without using the LLM. The goal is to check whether the system can find relevant exercises for a given query.
+
+Each test query is annotated with expected properties such as:
+
+\begin{itemize}
+\item target body part
+\item equipment
+\item optional difficulty level
+\item expected keywords
+\end{itemize}
+
+The retrieval pipeline is:
+
+\begin{enumerate}
+\item question $\rightarrow$ embedding (MiniLM)
+\item embedding $\rightarrow$ Qdrant
+\item top-5 most similar exercises returned
+\item evaluation against expected criteria
+\end{enumerate}
+
+\subsection*{Metrics}
+
+We use standard information retrieval metrics:
+
+\begin{itemize}
+\item Hit@k (whether a relevant result appears in top k)
+\item Precision@5
+\item Mean Reciprocal Rank (MRR)
+\end{itemize}
+
+\subsection*{Results}
+
+\begin{center}
+\begin{tabular}{l r}
+\hline
+Metric & Value \\
+\hline
+Number of queries & 12 \\
+Hit@1 & 0.500 \\
+Hit@3 & 0.917 \\
+Hit@5 & 0.917 \\
+Precision@5 & 0.583 \\
+MRR & 0.694 \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection*{Interpretation}
+
+The results show that the retrieval component already performs reasonably well.
+
+Hit@5 = 0.917 means that in 11 out of 12 queries, at least one relevant exercise appears in the top 5 results. This is sufficient for a RAG system, where the LLM can use multiple candidates as context.
+
+However, Hit@1 = 0.500 indicates that the top result is not always optimal. This is expected at this stage, as we use a general-purpose embedding model and datasets with inconsistent metadata.
+
+A notable failure case is a query for beginner bodyweight leg exercises, where retrieval fails to return relevant results. This highlights limitations of:
+
+\begin{itemize}
+\item missing or inconsistent dataset fields
+\item lack of filtering by metadata (e.g. equipment)
+\end{itemize}
+
+Overall, retrieval is already usable, but clearly the main bottleneck for further improvement.
+
+\section*{Baseline LLM vs RAG}
+
+We compare two approaches using the same model (Llama 3.1 8B via Ollama):
+
+\begin{itemize}
+\item Baseline: direct question $\rightarrow$ LLM
+\item RAG: question $\rightarrow$ retrieval $\rightarrow$ LLM with context
+\end{itemize}
+
+The difference lies only in the prompt, not in the model.
+
+\subsection*{Key Observations}
+
+\begin{center}
+\begin{tabular}{l l l}
+\hline
+Aspect & Baseline & RAG \\
+\hline
+Knowledge source & General & Dataset + LLM \\
+Exercise names & Generic & More specific \\
+Grounding & None & Dataset-grounded \\
+Hallucination risk & Higher & Lower (if retrieval good) \\
+Weakness & Not dataset-aligned & Depends on retrieval \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection*{Example Insights}
+
+For queries such as:
+
+\textit{"What chest exercises can I do with dumbbells?"}
+
+the baseline produces reasonable general answers, but may include exercises not present in our dataset.
+
+The RAG system, on the other hand, generates answers based on retrieved entries, leading to:
+
+\begin{itemize}
+\item more consistent exercise naming
+\item better alignment with the dataset
+\item structured explanations based on retrieved metadata
+\end{itemize}
+
+However, in cases where retrieval fails (e.g. broad queries like beginner bodyweight legs), the RAG answer becomes worse than the baseline. This confirms that RAG performance is highly dependent on retrieval quality.
+
+\subsection*{Discussion}
+
+The comparison highlights an important insight:
+
+\begin{itemize}
+\item Baseline LLM is strong in general reasoning and common knowledge
+\item RAG is strong in grounding answers to a specific dataset
+\item The overall system quality is dominated by retrieval performance
+\end{itemize}
+
+This suggests that the next development focus should not be a larger model, but improvements in retrieval:
+
+\begin{itemize}
+\item metadata filtering (BodyPart, Equipment, Level)
+\item dataset cleaning and deduplication
+\item improved evaluation dataset
+\end{itemize}
+
+\section*{Conclusion of Current Phase}
+
+At this stage, we have successfully implemented a working RAG prototype:
+
+\begin{itemize}
+\item vector-based retrieval using Qdrant
+\item embedding model integration
+\item prompt-based grounding for LLM
+\item initial evaluation framework
+\end{itemize}
+
+The system already demonstrates the core advantage of RAG: grounding responses in a controlled dataset.
+
+The main limitation is retrieval quality, which directly affects final answer quality. This will be the primary focus of further work.
+\bibliographystyle{unsrt}
+\bibliography{report}
+
+\end{document}

@@ -1,18 +1,16 @@
 from sentence_transformers import SentenceTransformer
-from qdrant_client import QdrantClient
 from src.config import (
     COLLECTION_NAME,
     EMBEDDING_MODEL,
-    QDRANT_HOST,
-    QDRANT_PORT,
     TOP_K,
+    create_qdrant_client,
 )
 
 
 class FitnessRAG:
     def __init__(self):
         self.model = SentenceTransformer(EMBEDDING_MODEL)
-        self.client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
+        self.client = create_qdrant_client()
 
     def retrieve_context(self, question: str, top_k: int = TOP_K) -> str:
         query_vector = self.model.encode(question).tolist()

@@ -36,13 +36,12 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from qdrant_client import QdrantClient
 from sentence_transformers import SentenceTransformer
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.config import COLLECTION_NAME, EMBEDDING_MODEL, QDRANT_HOST, QDRANT_PORT, TOP_K  # noqa: E402
+from src.config import COLLECTION_NAME, EMBEDDING_MODEL, TOP_K, create_qdrant_client  # noqa: E402
 
 EVAL_PATH = PROJECT_ROOT / "data" / "eval" / "retrieval_eval.jsonl"
 RESULTS_DIR = PROJECT_ROOT / "report" / "results"
@@ -98,12 +97,19 @@ def _matches_expected(payload: dict[str, Any], spec: dict[str, Any]) -> bool:
 
 # to je funkcija, ki naloži testne vprašanja
 def _load_eval_cases(path: Path) -> list[dict[str, Any]]:
+    decoder = json.JSONDecoder()
+    text = "\n".join(
+        line for line in path.read_text(encoding="utf-8").splitlines() if not line.strip().startswith("//")
+    )
     cases = []
-    with path.open(encoding="utf-8") as handle:
-        for line in handle:
-            line = line.strip()
-            if line:
-                cases.append(json.loads(line))
+    position = 0
+    while position < len(text):
+        while position < len(text) and text[position].isspace():
+            position += 1
+        if position >= len(text):
+            break
+        item, position = decoder.raw_decode(text, position)
+        cases.append(item)
     return cases
 
 # to je funkcija, ki zapiše rezultate v CSV datoteko
@@ -167,7 +173,7 @@ def main() -> None:
     cases = _load_eval_cases(EVAL_PATH)
 
     model = SentenceTransformer(EMBEDDING_MODEL)
-    client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
+    client = create_qdrant_client()
 
     results: list[EvalResult] = []
     for case in cases:

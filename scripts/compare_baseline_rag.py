@@ -36,12 +36,19 @@ MAX_EXAMPLES = 5
 
 
 def _load_questions() -> list[dict[str, str]]:
+    decoder = json.JSONDecoder()
+    text = "\n".join(
+        line for line in EVAL_PATH.read_text(encoding="utf-8").splitlines() if not line.strip().startswith("//")
+    )
     questions = []
-    with EVAL_PATH.open(encoding="utf-8") as handle:
-        for line in handle:
-            if line.strip():
-                item = json.loads(line)
-                questions.append({"id": item["id"], "question": item["question"]})
+    position = 0
+    while position < len(text):
+        while position < len(text) and text[position].isspace():
+            position += 1
+        if position >= len(text):
+            break
+        item, position = decoder.raw_decode(text, position)
+        questions.append({"id": item["id"], "question": item["question"]})
     return questions[:MAX_EXAMPLES]
 
 

@@ -1,20 +1,24 @@
 # scripts/index_megagym.py
 
 import os
+import sys
+from pathlib import Path
+
 import pandas as pd
 from sentence_transformers import SentenceTransformer
-from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams, PointStruct
-from pathlib import Path
-from src.config import COLLECTION_NAME, EMBEDDING_MODEL, QDRANT_HOST, QDRANT_PORT
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(PROJECT_ROOT))
+
+from src.config import COLLECTION_NAME, EMBEDDING_MODEL, create_qdrant_client
+
 DATA_PATH = PROJECT_ROOT / "data" / "raw" / "megaGymDataset.csv"
 
 df = pd.read_csv(DATA_PATH).fillna("")
 
 model = SentenceTransformer(EMBEDDING_MODEL)
-client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
+client = create_qdrant_client()
 
 FORCE_RECREATE_COLLECTION = os.getenv("FORCE_RECREATE_COLLECTION", "false").lower() in {
     "1",

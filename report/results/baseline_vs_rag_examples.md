@@ -1,262 +1,381 @@
-# Primerjava: baseline LLM proti RAG odgovoru
+# Baseline vs RAG Examples
 
-Ta dokument prikazuje kvalitativno primerjavo dveh načinov odgovarjanja na ista uporabniška vprašanja.
+Baseline answers are generated directly by the local LLM. RAG answers use the same LLM, but with retrieved MegaGym exercise entries added to the prompt.
 
-Uporabljen je isti lokalni jezikovni model: `llama3.1:8b` prek Ollame.
+## triceps_cable
 
-Razlika ni v modelu, ampak v promptu.
+**Question:** Can you recommend some triceps exercises that use a cable machine?
 
-## Kaj je baseline
+**Baseline answer**
 
-Baseline pomeni, da vprašanje pošljemo direktno v LLM brez podatkov iz našega dataseta.
+Certainly! Here are some excellent tricep-exercises that utilize a cable machine:
 
-Poenostavljeno:
+1. **Tricep Pushdowns** - This is a basic and effective exercise for the back of your arms. You can set up an angle on the bar to make it more challenging.
 
-```text
-uporabnikovo vprašanje -> Ollama -> odgovor
-```
+2. **Cable Face Pull** - Focuses on pulling towards your body, which helps in strengthening the rear part of your shoulders as well.
 
-Prompt za baseline je bil:
+3. **Seated Cable Overhead Extension** - This machine is great for building strength in both triceps and biceps. The angle you set will affect how much work each group does.
 
-```text
-You are a helpful fitness assistant.
+4. **Cable Tricep Pushdowns with an Underhand Grip** - Adjusting the grip can vary in difficulty, making it a versatile option.
 
-Answer the user's fitness question directly.
-If you are uncertain, say so clearly.
+5. **Reverse Cable Curl With Extension** - This machine combines both curl and extension exercises into one movement, which is great for full triceps workout.
 
-Question:
-{question}
+6. **Seated Cable Overhead Tricep Extensions with Adduction** - Adds an upper body component to your exercise routine by moving the arm in a circular motion while lowering it.
 
-Answer:
-```
+7. **Cable Flyes (Standing) - A classic choice that targets both triceps and shoulders, making for a full-body movement.
 
-To pomeni, da model odgovarja iz svojega splošnega znanja. Ne ve, katere vaje so v našem MegaGym datasetu.
+Remember to always warm up thoroughly before starting any exercises to prevent injuries!
 
-## Kaj je RAG
+**RAG answer**
 
-RAG pomeni Retrieval-Augmented Generation.
+Here are some triceps exercises that can be performed using a cable machine:
 
-Pri RAG odgovoru najprej poiščemo relevantne vaje v Qdrantu, potem pa jih dodamo v prompt za isti LLM.
+1. **Cable Triceps Extension - Gethin Variation**  
+   *Why it matches the question:* This exercise targets the triceps muscles specifically and is commonly done with a cable.
+   *Short explanation:* It involves extending the elbows to isolate the triceps.
+   *Difficulty level: Intermediate*
 
-Poenostavljeno:
+2. **Lying Cable Triceps Extension**
+   *Why it matches the question:* This exercise also focuses on the triceps and uses a cable for resistance.
+   *Short explanation:* Similar to the lying cable variation, this provides isolation with moderate reps.
+   *Difficulty level: Intermediate
 
-```text
-uporabnikovo vprašanje -> embedding -> Qdrant -> relevantne vaje -> Ollama -> odgovor
-```
+3. **Cable Straight-Bar Push-down**  
+   *Why it matches the question:* This is another popular triceps exercise that can be performed using cables for added resistance.
+   *Short explanation:* It targets the triceps through a straight-bar movement pattern.
+   *Difficulty level: Intermediate
 
-Prompt za RAG vsebuje dodatni del:
+These exercises offer effective isolation and targeted strength training to strengthen your triceps.
 
-```text
-Retrieved exercise entries:
-{context}
-
-Question:
-{question}
-
-Answer:
-```
-
-Celoten RAG prompt modelu tudi naroči:
-
-- naj uporablja samo pridobljene exercise entryje
-- naj preferira ujemanje po mišični skupini, opremi in težavnosti
-- naj odstrani duplikate
-- naj ne izmišljuje vaj, ki niso podprte s kontekstom
-
-## Kaj smo primerjali
-
-Za istih 5 vprašanj smo generirali:
-
-1. baseline odgovor brez retrieval konteksta
-2. RAG odgovor z retrieved kontekstom iz Qdranta
-
-Primerjava je kvalitativna. Namen za trenutno fazo ni še polna avtomatska ocena odgovorov, ampak prikaz, kako RAG spremeni tip odgovora.
-
-## Povzetek opažanj
-
-| Vidik | Baseline | RAG |
-| --- | --- | --- |
-| Vir informacij | Splošno znanje modela | MegaGym dataset + LLM |
-| Konkretna imena vaj | Včasih splošna ali parafrazirana | Pogosteje točna imena iz dataseta |
-| Grounding | Ni vezan na naš dataset | Vezan na retrieved context |
-| Tveganje halucinacij | Višje | Nižje, če je retrieval dober |
-| Slabost | Lahko poda dobro splošno priporočilo, ki ni v datasetu | Če retrieval vrne slabe zadetke, je slabši tudi odgovor |
-
-## Primer 1: vaje za prsa z ročkami
-
-**Vprašanje**
+**Retrieved context preview**
 
 ```text
-What chest exercises can I do with dumbbells?
+Exercise: Cable Triceps Extension - Gethin Variation
+Description: The cable rope push-down is a popular exercise targeting the triceps muscles. It's easy to learn and perform, making it a favorite for everyone from beginners to advanced lifters. It is usually performed for moderate to high reps, such as 8-12 reps or more per set, as part of an upper-body or arm-focused workout.The cable rope push-down is a popular exercise targeting the triceps muscles. It's easy to learn and perform, making it a favorite for everyone from beginners to advanced lifters. It is usually performed for moderate to high reps, such as 8-12 reps or more per set, as part of an upper-body or arm-focused workout.
+Type: Strength
+Body part: Triceps
+Equipment: Cable
+Difficulty level: Intermediate
+Rating: 
+Rating description: 
+
+
+
+Exercise: Lying cable triceps extension
+Description: The lying cable triceps extension is an isolation exercise performed lying on either a bench or the floor. This movement is usually performed for moderate to high reps for a burn and pump as part of an arm-focused workout.
+Type: Strength
+Body part: Triceps
+Equipment: Cable
+Difficulty level: Intermediate
+Rating: 8.6
+Rating description: 
 ```
 
-### Baseline odgovor
+## beginner_bodyweight_legs
 
-Baseline poda splošno uporaben odgovor:
+**Question:** Which bodyweight leg exercises would you suggest for a beginner?
 
-- Dumbbell Bench Press
-- Dumbbell Flyes
-- Dumbbell Dips
-- Dumbbell Chest Press
+**Baseline answer**
 
-Odgovor je razumljiv, vendar ni vezan na naš dataset. Model doda tudi vajo `Dumbbell Dips`, ki ni nujno podprta z retrieved podatki v našem sistemu.
+For beginners interested in bodyweight leg exercises, I recommend focusing on simple and effective movements that can build strength and improve lower body flexibility. Here are some beginner-friendly options:
 
-### RAG odgovor
+1. **Leg Raises**: This is a classic exercise that targets the hamstrings and quadriceps.
+   - Lie flat on your back with your knees bent.
+   - Lift one foot off the ground, keeping it straight or slightly bent.
+   - Lower it to the starting position before repeating with the other leg.
 
-RAG odgovor uporabi retrieved vaje iz MegaGym dataseta:
+2. **Lunges**: Great for overall lower body strength.
+   - Stand with feet hip-width apart.
+   - Take a large step forward and lower into a lunge position.
+   - Push back up to standing.
 
-- Dumbbell Chest Fly
-- Dumbbell Bench Press-
-- Dumbbell Flyes
-- Incline Dumbbell Flyes
+3. **Wall Angels (Dumbbell Swings)**: A good core engagement exercise that also targets the hamstrings and quadriceps.
+   - Hold onto a stable wall for balance.
+   - Swing your leg out wide, keeping it straight or slightly bent.
+   - Return it to starting position.
 
-Pri vsaki vaji navede:
+4. **Bicycle Kicks**: Excellent for toning and strengthening the thighs and glutes.
+   - Start in high plank position with hands directly under shoulders.
+   - Alternate kicking one foot up behind you, bringing knee towards chest.
 
-- zakaj se ujema z vprašanjem
-- kratko razlago
-- težavnost, če je na voljo
+5. **Bodyweight Squats**: A fundamental exercise that builds leg strength and balance.
+   - Stand on a mat or block with feet shoulder-width apart.
+   - Lower into a squat, keeping back straight and weight in heels.
+   - Push through heels to stand tall again.
 
-### Interpretacija
+6. **Side Leg Raises**: Focuses on the outer thighs (glutes) while improving core stability.
+   - Lie flat on your side.
+   - Lift one leg up off the ground, hold for a few seconds, then lower it back down.
 
-To je dober primer, kjer RAG deluje bolje za naš namen. Odgovor je bolj vezan na dataset in uporablja dejanska imena vaj, ki jih je naš sistem našel v Qdrantu.
+These exercises can be done with minimal equipment and can easily be adapted to accommodate different fitness levels. Remember to start slow and gradually increase difficulty as you progress!
 
-## Primer 2: triceps vaje na kablu
+**RAG answer**
 
-**Vprašanje**
+I suggest the following exercises for a beginner:
+
+1. **Single Leg Push-off**
+   - Why it matches: This exercise is specifically designed for beginners, targeting the quadriceps without any additional equipment needed.
+   - Short explanation: It's an excellent choice for leg strength and flexibility in a low-impact way.
+   - Difficulty level: Beginner
+
+2. **Holman Straight Plank with Alternating Leg Kick-Under**
+   - Why it matches: This exercise focuses on abdominal muscles but requires minimal equipment, making it suitable for beginners.
+   - Short explanation: It targets the core while providing stability through the plank position and adding a leg kick component.
+   - Difficulty level: Intermediate
+
+3. **Single-Leg Stride Jump**
+   - Why it matches: Similar to Single Leg Push-off, this exercise is low-impact and can be easily mastered without equipment.
+   - Short explanation: It builds strength in the quadriceps while improving balance and coordination.
+   - Difficulty level: Beginner
+
+These exercises are suitable for beginners looking to improve leg strength and core stability through bodyweight movements.
+
+**Retrieved context preview**
 
 ```text
-Which triceps exercises use a cable machine?
+Exercise: Alternate Leg Diagonal Bound
+Description: 
+Type: Plyometrics
+Body part: Quadriceps
+Equipment: 
+Difficulty level: Beginner
+Rating: 6.9
+Rating description: Average
+
+
+
+Exercise: Single Leg Push-off
+Description: 
+Type: Plyometrics
+Body part: Quadriceps
+Equipment: Other
+Difficulty level: Beginner
+Rating: 9.2
+Rating description: Average
+
+
+
+Exercise: Holman Straight Plank with Alternating Leg Kick-Under
+Description: 
+Type: Strength
+Body part: Abdominals
+Equipment: Body Only
+Difficulty level: Intermediate
+Rating: 
+Rating description: 
+
+
+
+Exercise: Alternating Leg Swing
+Description: 
+Type: Stretching
+Body part: Hamstrings
+Equipment: Body Only
+Difficulty level: Beginner
+Rating: 0.0
+Rating description: 
+
+
+
+Exercise: Single-Leg Stride Jump
+Description: 
+Type: Plyometrics
+Body part: Quadriceps
+Equipment: Other
+Difficulty level: Beginner
+Rating: 0.0
+Rating description:
 ```
 
-### Baseline odgovor
+## pullup_bar_back
 
-Baseline poda kratek splošen odgovor:
+**Question:** What back exercises can I perform with a pull-up bar?
 
-- Cable Tricep Pushdowns
-- Cable Overhead Tricep Extensions
+**Baseline answer**
 
-Odgovor je pravilen v splošnem fitness smislu, ampak ni zelo bogat.
+Performing back exercises with a pull-up bar can be highly effective for strengthening your upper back and shoulders. Here are some excellent back exercises that you can do using a pull-up bar:
 
-### RAG odgovor
+1. **Deadlift** - This is one of the most comprehensive back exercises, targeting multiple muscles in your upper back. You can complete this move as many times as possible or with weight.
 
-RAG vrne več konkretnih vaj iz dataseta:
+2. **Pull-Up** - A fundamental exercise for building strength and endurance in your back. Pull-ups target the latissimus dorsi (lats), rhomboid, trapezius, teres major, and minor, supraspinatus, infraspinatus, rotator cuff muscles, biceps brachii, triceps brachii, quads, hamstrings, glutes, quadriceps, calves.
 
-- Cable Overhead Triceps Extension - Gethin Variation
-- Lying cable triceps extension
-- Triceps Overhead Extension with Rope - Gethin Variation
-- Cable Triceps Extension - Gethin Variation
-- 30 Arms Underhand Cable Straight-Bar Push-Down
+3. **High Pull** - This is a variation of the pull-up that targets your back muscles more effectively than traditional pull-ups or deadlifts. You can perform it with different weights and heights to challenge yourself in different ways.
 
-### Interpretacija
+4. **Wide Grip Push-Ups (Overhand)**
+   - This exercise helps strengthen the lower part of the deltoids, trapezius, rhomboids, infraspinatus, supraspinatus, teres minor, rotator cuff, and lats.
+   
+5. **Low Pull with Kettlebells** - Using kettlebells can add a different dimension to your back workout by engaging multiple muscle groups and improving grip strength.
 
-RAG je tukaj boljši, ker poda več konkretnih vaj in jih poveže z opremo `Cable` ter mišično skupino `Triceps`. To dobro pokaže vrednost retrievala.
+6. **Rowing Exercises (Bent Over Rows, Reverse Rows)** - These exercises focus on the rhomboids, teres minor, supraspinatus, infraspinatus, trapezius, upper pectoralis minor, anterior deltoid, and shoulder rotator cuff muscles.
+   
+Remember to start with less weight initially to ensure proper form before progressively increasing it. Adjustments in grip width can also change the emphasis on different muscle groups when doing exercises like pull-ups or rows.
 
-## Primer 3: začetniške bodyweight vaje za noge
+Always warm up well before starting any exercise routine, especially those that involve your back, as this helps prevent injury and makes your workout more effective.
 
-**Vprašanje**
+**RAG answer**
+
+Upside-down pull-up (Moderate difficulty) - This exercise targets the middle back and is considered moderate in difficulty.
+
+Around-the-world pull-up (Beginner/Moderate difficulty) - Focuses on individual arms or sides of the back while also increasing time under tension at the top of each rep, making it suitable for beginners as well.
+
+30 Back Straight-Arm Bar Pull-Down (Intermediate) - Targets middle back muscles and requires moderate difficulty to perform.
+
+**Retrieved context preview**
 
 ```text
-Give me beginner leg exercises using bodyweight.
+Exercise: Upside-down pull-up
+Description: The upside-down pull-up is an advanced bodyweight exercise that is normally performed on a pair of gymnastic rings. It involves pulling the body toward the ceiling in an inverted position. It targets the same muscles as traditional pull-ups, including the lats (latissimus dorsi), biceps, and core. However, the pulling angle is more akin to a bent-over row or upright row, depending on the angle of your hips.
+Type: Strength
+Body part: Middle Back
+Equipment: Other
+Difficulty level: Intermediate
+Rating: 8.8
+Rating description: Average
+
+
+
+Exercise: UP Squat
+Description: The barbell back squat is a popular compound movement that emphasizes building the lower-body muscle groups and overall strength. It's the classic way to start a leg day, and is a worthy centerpiece to a lower-body training program. The squat is a competitive lift in the sport of powerlifting, but is also a classic measurement of lower-body strength. With the barbell racked on the traps or upper back, the emphasis is placed on the posterior chain but the entire body gets worked. The back squat can be trained in everything from heavy singles to sets of 20 reps or higher.
+Type: St
 ```
 
-### Baseline odgovor
+## biceps_barbell
 
-Baseline poda zelo uporaben splošen odgovor:
+**Question:** Could you list some barbell exercises that are good for training the biceps?
 
-- Squats
-- Lunges
-- Glute Bridges
-- Calf Raises
-- Wall Sits
+**Baseline answer**
 
-Za uporabnika je to dober odgovor.
+Certainly! Here are some effective barbell exercises to work on your biceps:
 
-### RAG odgovor
+1. **Barbell Bicep Curl** - This is a classic and widely used exercise, targeting both the front (brachialis) and back of the arm (triceps bracillaris).
 
-RAG odgovor je manj prepričljiv, ker retrieval ni vrnil idealnih zadetkov. Vrnjen kontekst vsebuje tudi vaje, ki niso dobro ujemanje z vprašanjem, na primer abdominalno vajo ali vajo z napravo.
+2. **Barbell Hammer Curl** - Focuses on increasing the grip strength while still working the bicep muscles.
 
-RAG zato predlaga predvsem:
+3. **Close-Grip Barbell Bicep Curl** - This variation adds a challenge by reducing the angle between your forearms and bar, making it harder to curl without compromising form.
 
-- Alternating Leg Swing
-- Alternate Leg Diagonal Bound
+4. **Incline Barbell Curl** - Increases intensity due to the incline of the lift, allowing for higher reps or heavier weights with less risk of strain compared to flat barbell curls.
 
-### Interpretacija
+5. **Barbell Dumbbell Bicep Variation (Dips)** - Combines elements of dumbbell and barbell curls into one exercise that works both sides of your biceps while keeping them balanced during the movement.
 
-To je pomemben negativen primer. Pokaže, da RAG ni avtomatsko boljši. Če retrieval najde slab kontekst, bo tudi generiran odgovor slabši ali manj uporaben.
+6. **Cable Tricep Extension with Barbell** - A compound movement targeting triceps, but also engaging the biceps as an accessory muscle group.
 
-Za predstavitev je ta primer koristen, ker pokaže realno omejitev trenutnega prototipa:
+Remember to maintain proper form throughout each exercise to maximize results and prevent injury. Adjust weights based on your current fitness level and goals!
 
-- dataset ima nekatere prazne ali nekonsistentne vrednosti pri `Equipment`
-- vprašanje je precej široko
-- trenutni retrieval uporablja samo semantično podobnost, brez dodatnega filtriranja po metapodatkih
+**RAG answer**
 
-## Primer 4: vaje za hrbet na pull-up baru
+Here are some barbell exercises that are effective for training the biceps:
 
-**Vprašanje**
+1. **Barbell Curl** - This exercise is one of the most recognizable and versatile arm exercises, targeting the biceps directly while allowing for significant load. It's typically performed in moderate to high reps (8-12 per set) as part of an arm-focused workout.
+
+    * Difficulty: Intermediate
+    * Rating: 9.0
+
+2. **Preacher Curl** - This variation targets the biceps more specifically by isolating them. The back pad on the bar helps prevent cheating, and it allows for a lower weight to achieve a great pump.
+    
+    * Difficulty: Intermediate
+    * Rating: 8.8 (Average)
+
+3. **Barbell Curl with Weighted Plates** - This can be used as an alternative to standard barbell curls if you want more specific bicep training or when using heavy weights for strength and size development.
+
+    * Difficulty: Intermediate
+
+These exercises are designed to target the biceps effectively, allowing you to build larger, stronger, and more defined biceps.
+
+**Retrieved context preview**
 
 ```text
-Which back exercises can I do with a pull-up bar?
+Exercise: Paul Carter Barbell Curl
+Description: The barbell curl is an arm exercise that is also one of the most recognizable movements in all of bodybuilding and fitness. It helps build sleeve-popping biceps and allows heavier loading than many other curl variations. It is usually performed in moderate to high reps, such as 8-12 reps per set, as part of the arm-focused portion of any workout.
+Type: Strength
+Body part: Biceps
+Equipment: Barbell
+Difficulty level: Intermediate
+Rating: 
+Rating description: 
+
+
+
+Exercise: Barbell curl-
+Description: The barbell curl is an arm exercise that is also one of the most recognizable movements in all of bodybuilding and fitness. It helps build sleeve-popping biceps and allows heavier loading than many other curl variations. It is usually performed in moderate to high reps, such as 8-12 reps per set, as part of the arm-focused portion of any workout.
+Type: Strength
+Body part: Biceps
+Equipment: Barbell
+Difficulty level: Intermediate
+Rating: 
+Rating description: 
+
+
+
+Exercise: Preacher Curl
+Description: The EZ-bar preacher curl is a classic exercise for building bigger biceps. This move is all about isolation. With the back of the upper arms against
 ```
 
-### Baseline odgovor
+## abs_ball
 
-Baseline navede splošne vaje:
+**Question:** Can you suggest a few abdominal exercises using an exercise ball?
 
-- Pull-ups
-- Lat Pulldowns
-- Chin-ups
+**Baseline answer**
 
-Tu je odgovor delno problematičen, ker `Lat Pulldowns` običajno niso vaja na pull-up baru, ampak na napravi ali kablu.
+Certainly! Here are some exercises that can help strengthen your abs while incorporating an exercise ball:
 
-### RAG odgovor
+1. **Bicycle Crunches**: Lie on the floor with your back against the ground and roll the exercise ball under your lower abdomen. Bend both knees slightly, engage your core muscles, and slowly lift your upper body by crunching up. Keep the balls of your feet flat on the floor as you move into a forward cycling motion that simulates pedaling.
 
-RAG se bolj opira na retrieved kontekst in vrne:
+2. **Oblique Crunch with Ball**: Sit on the exercise ball with good posture; it should be level across both sides of your midsection (not resting directly on the back or in front of the chest). Lean forward slightly and roll up onto the balls of your feet, keeping them flat against the ground. Hold this position for a few seconds, then slowly lower yourself back down.
 
-- Around-the-world pull-up
-- Upside-down pull-up
-- Pull-up kot splošno oziroma implicitno vajo
+3. **Ball Sit-Ups**: Similar to bicycle crunches but performed standing upright with your feet on the floor (not touching it), maintaining balance on your core muscles as you roll up onto the balls of your feet and sit up tall.
 
-### Interpretacija
+4. **Single Leg Roll-Up**: Start in a lying position on the exercise ball, with one leg bent at a 90-degree angle. Lean forward to roll onto the ball and lift the other leg out over your chest. Hold this position for a few seconds before lowering back down.
 
-RAG je bolj vezan na najdene podatke, baseline pa vključi tudi širše fitnes znanje. To pokaže razliko med "splošno uporabnim" in "dataset-grounded" odgovorom.
+5. **Oblique Crunches (With Ball)**: Sit or lie as you normally would for a standard crunch but use an exercise ball instead of a flat surface under your lower abdomen. Keep the balls of your feet on the floor, and roll up onto the ball as you crunch upwards, then lower yourself back down.
 
-## Primer 5: biceps z drogom
+These exercises target different parts of your abs, helping to strengthen them from multiple angles and provide a more dynamic workout compared to traditional sit-ups or lying down crunches.
 
-**Vprašanje**
+**RAG answer**
+
+Certainly! Here are some suggestions for abdominal exercises that use an exercise ball:
+
+1. **Exercise Ball Cable Crunch (Gethin Variation)**
+   - *Why it matches the question*: This exercise targets the abdominals and uses a cable, which is often found in home gyms or gym equipment.
+   - *Explanation*: The crunch variation with a ball can increase range of motion and enhance both stretching and contracting muscles. It can be done for low reps with slower tempo to focus on hard contractions or higher reps for endurance.
+   - *Difficulty level*: Intermediate
+
+2. **Exercise Ball Crunch**
+   - *Why it matches the question*: This exercise is similar to the Gethin variation but uses a different piece of equipment (exercise ball).
+   - *Explanation*: Like the previous one, this can be performed for low reps with slow tempo or high reps.
+   - *Difficulty level*: Intermediate
+
+3. **Exercise Ball Torso Rotation**
+   - *Why it matches the question*: This exercise focuses on rotational muscles and requires stability from an exercise ball.
+   - *Explanation*: It targets obliques, glutes, and hip muscles through a rotation motion that can be done alternately or for time/reps.
+   - *Difficulty level*: Intermediate
+
+These exercises will help you work on your core strength effectively using the ball as a tool.
+
+**Retrieved context preview**
 
 ```text
-Show me barbell exercises for biceps.
+Exercise: Exercise Ball Cable Crunch - Gethin Variation
+Description: The exercise ball crunch is a popular gym exercise targeting the abdominals. Unlike crunches on the floor or a bench, by using a ball, you can increase the range of motion and both stretch and contract the abs on every rep. The ball crunch can be performed for low reps with a slower tempo, focusing on a hard contraction, or for higher reps.
+Type: Strength
+Body part: Abdominals
+Equipment: Cable
+Difficulty level: Intermediate
+Rating: 
+Rating description: 
+
+
+
+Exercise: Exercise Ball Cable Crunch - Gethin Variation
+Description: The exercise ball crunch is a popular gym exercise targeting the abdominals. Unlike crunches on the floor or a bench, by using a ball, you can increase the range of motion and both stretch and contract the abs on every rep. The ball crunch can be performed for low reps with a slower tempo, focusing on a hard contraction, or for higher reps.
+Type: Strength
+Body part: Abdominals
+Equipment: Cable
+Difficulty level: Intermediate
+Rating: 
+Rating description: 
+
+
+
+Exercise: Exercise ball crunch
+Description: The exercise ball crunch is a popular gym exercise targeting the abdominals. Unlike crunches on 
 ```
-
-### Baseline odgovor
-
-Baseline poda pričakovane splošne vaje, kot so barbell curls in reverse curls.
-
-### RAG odgovor
-
-RAG uporabi konkretne retrieved zadetke iz dataseta, na primer:
-
-- Preacher Curl
-- Paul Carter Barbell Curl
-- Barbell curl-
-- Barbell Curl
-
-### Interpretacija
-
-Ta primer je soliden za RAG, čeprav se vidi tudi težava z duplikati oziroma podobnimi zapisi v datasetu. To je dober argument za naslednji korak: čiščenje oziroma deduplikacija podatkov.
-
-## Zaključek
-
-Za trenutno fazo projekta ta primerjava pokaže osnovno vrednost RAG pristopa:
-
-- baseline zna dati dobre splošne fitness odgovore
-- RAG zna odgovore vezati na naš dataset
-- RAG je najboljši, ko retrieval vrne kakovosten kontekst
-- RAG lahko odpove, če retrieval vrne napačne ali šibke zadetke
-
-Glavni naslednji korak ni nujno bolj kompleksen LLM, ampak boljši retrieval:
-
-- filtriranje po metapodatkih, na primer `BodyPart`, `Equipment`, `Level`
-- čiščenje praznih ali nekonsistentnih vrednosti v datasetu
-- odstranjevanje duplikatov oziroma near-duplicate vaj
-- večji eval set z ročno ocenjenimi primeri

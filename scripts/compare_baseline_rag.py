@@ -9,13 +9,12 @@
 
 
 # Pomembno: model je isti.
-# V obeh primerih uporabljamo: llama3.1:8b
+# V obeh primerih uporabljamo: llama3.2:1b
 
 # Razlika je samo v tem, kaj model dobi kot input.
 # Baseline dobi samo vprašanje.
 # RAG dobi vprašanje + najdene vaje iz dataseta.
 # Zato baseline odgovarja iz splošnega znanja, RAG pa naj bi odgovarjal bolj po našem datasetu.
-
 
 from __future__ import annotations
 

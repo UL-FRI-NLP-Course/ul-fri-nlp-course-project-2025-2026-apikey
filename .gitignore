@@ -149,3 +149,6 @@ data/processed/*
 data/**/*.parquet
 data/**/*.feather
 data/**/*.pkl
+
+# Testing
+/testing

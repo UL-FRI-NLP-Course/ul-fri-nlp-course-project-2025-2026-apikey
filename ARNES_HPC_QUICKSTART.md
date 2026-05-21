@@ -4,16 +4,18 @@ This guide starts after you pull the repository. It shows how to run the final
 Fitness RAG assistant on Arnes HPC with:
 
 - Streamlit UI
-- Ollama model `qwen2.5:1.5b`
+- Ollama model `llama3.2:1b`
 - local Qdrant storage through `QDRANT_PATH`
 - MegaGym exercise dataset indexing
 - retrieval and baseline-vs-RAG evaluation
 
-The final project comparison intentionally uses a small 1.5B model. The goal is
-to show that RAG improves grounding by giving the same model retrieved MegaGym
-exercise entries, instead of relying only on general model knowledge.
+**Note:** this quickstart assumes a Bash/Linux-style shell for the commands shown
+below. The remote HPC commands run on Linux. If you are using Windows
+PowerShell on your laptop, some local commands such as `test -f`, `pbcopy`,
+`rsync`, `~/.ssh/...`, and `&&` or `||` will need PowerShell equivalents or a
+Unix-like shell such as Git Bash or WSL.
 
-Replace `<USERNAME>` with your Arnes username, for example `lr37199`.
+Replace `<USERNAME>` with your Arnes username.
 
 ## 1. Local Pull
 
@@ -94,12 +96,11 @@ exit
 Do not run model inference, indexing, or Streamlit on the login node. Use the
 login node only for setup and SLURM commands.
 
-## 3. Upload Project To Your Own HPC Home
+## 3. Upload Project To The HPC Home Directory
 
-For now, each project member can run the setup in their own HPC home directory.
-Upload only to your own `~/rag-app`. Do not upload over another member's home
-directory or over a future shared project directory unless the team explicitly
-agrees.
+This guide uses `~/rag-app` in the user's HPC home directory as the working
+project location. If your course setup later uses a shared project directory,
+adapt the paths in this guide accordingly.
 
 From your laptop, inside the repository root:
 
@@ -148,8 +149,8 @@ report/
 ARNES_HPC_QUICKSTART.md
 ```
 
-Later, if the team migrates to `/d/hpc/projects/onj_fri/apikey`, update the
-paths in this guide from `~/rag-app` to the shared project path.
+If your deployment moves to `/d/hpc/projects/onj_fri/apikey`, update the paths
+in this guide from `~/rag-app` to that shared project path.
 
 ## 4. Prepare Python Environment On HPC
 
@@ -254,7 +255,7 @@ export PATH="$HOME/.local/bin:$PATH"
 export OLLAMA_MODELS="$HOME/models/ollama"
 export OLLAMA_HOST="127.0.0.1:11434"
 export OLLAMA_URL="http://127.0.0.1:11434"
-export OLLAMA_MODEL="qwen2.5:1.5b"
+export OLLAMA_MODEL="llama3.2:1b"
 export QDRANT_PATH="$HOME/rag-app/qdrant_storage"
 mkdir -p logs
 ollama serve > logs/ollama-${SLURM_JOB_ID}.log 2>&1 &
@@ -271,7 +272,7 @@ Expected result:
 Pull the final model:
 
 ```bash
-ollama pull qwen2.5:1.5b
+ollama pull llama3.2:1b
 ollama list
 ```
 
@@ -279,13 +280,13 @@ Expected result:
 
 ```text
 NAME            ID              SIZE
-qwen2.5:1.5b    ...             986 MB
+llama3.2:1b     ...             ...
 ```
 
 Test GPU inference:
 
 ```bash
-ollama run qwen2.5:1.5b "Answer in one sentence: what is a dumbbell chest press?"
+ollama run llama3.2:1b "Answer in one sentence: what is a dumbbell chest press?"
 ollama ps
 ```
 
@@ -351,7 +352,7 @@ cd ~/rag-app
 source .venv/bin/activate
 export QDRANT_PATH="$HOME/rag-app/qdrant_storage"
 export OLLAMA_URL="http://127.0.0.1:11434"
-export OLLAMA_MODEL="qwen2.5:1.5b"
+export OLLAMA_MODEL="llama3.2:1b"
 python scripts/compare_baseline_rag.py
 ```
 
@@ -380,7 +381,7 @@ cd ~/rag-app
 source .venv/bin/activate
 export QDRANT_PATH="$HOME/rag-app/qdrant_storage"
 export OLLAMA_URL="http://127.0.0.1:11434"
-export OLLAMA_MODEL="qwen2.5:1.5b"
+export OLLAMA_MODEL="llama3.2:1b"
 streamlit run app.py --server.address 0.0.0.0 --server.port 8501 > logs/streamlit-${SLURM_JOB_ID}.log 2>&1 &
 sleep 5
 tail -n 30 logs/streamlit-${SLURM_JOB_ID}.log
@@ -467,27 +468,3 @@ squeue -u $USER
 tail -f logs/eval-<JOBID>.out
 tail -f logs/eval-<JOBID>.err
 ```
-
-## 14. Final Project Takeaway
-
-Use this as the final report/presentation message:
-
-```text
-With the same small 1.5B instruction model, RAG improves domain grounding by
-forcing answers to use retrieved MegaGym exercise entries. The baseline model
-often gives generic or unsupported fitness suggestions, while the RAG version
-uses concrete exercise names and metadata from the dataset. The main limitation
-is retrieval quality: when retrieval returns weak context, the RAG answer also
-becomes weaker.
-```
-
-Verified HPC retrieval metrics:
-
-| Metric | Value |
-| --- | ---: |
-| Queries | 11 |
-| Hit@1 | 0.636 |
-| Hit@3 | 0.909 |
-| Hit@5 | 0.909 |
-| Precision@5 | 0.582 |
-| MRR | 0.742 |

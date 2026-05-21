@@ -17,7 +17,7 @@ def _get_int_env(name: str, default: int) -> int:
 
 
 COLLECTION_NAME = os.getenv("COLLECTION_NAME", "megagym_exercises")
-OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "llama3.1:8b")
+OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "llama3.2:1b")
 OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434").rstrip("/")
 EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "sentence-transformers/all-MiniLM-L6-v2")
 QDRANT_PATH = os.getenv("QDRANT_PATH", "").strip()

@@ -328,7 +328,7 @@ Inside the GPU node shell:
 cd ~/rag-app
 source .venv/bin/activate
 export QDRANT_PATH="$HOME/rag-app/qdrant_storage"
-python scripts/evaluate_retrieval.py
+python scripts/run_evaluation.py --mode retrieval
 ```
 
 Expected result from the verified HPC run:
@@ -353,7 +353,7 @@ source .venv/bin/activate
 export QDRANT_PATH="$HOME/rag-app/qdrant_storage"
 export OLLAMA_URL="http://127.0.0.1:11434"
 export OLLAMA_MODEL="llama3.2:1b"
-python scripts/compare_baseline_rag.py
+python scripts/run_evaluation.py --mode comparison
 ```
 
 Expected result:
@@ -370,6 +370,12 @@ report/results/retrieval_eval_results.md
 report/results/retrieval_eval_results.csv
 report/results/baseline_vs_rag_examples.md
 report/results/baseline_vs_rag_examples.csv
+```
+
+To run both evaluation steps in sequence:
+
+```bash
+python scripts/run_evaluation.py
 ```
 
 ## 11. Run The Streamlit UI

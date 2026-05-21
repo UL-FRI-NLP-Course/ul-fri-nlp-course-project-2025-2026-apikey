@@ -31,6 +31,30 @@ The project uses:
 
 ---
 
+# Evaluation
+
+The repository includes two evaluation workflows:
+
+* **Retrieval evaluation** measures whether Qdrant returns relevant exercises for a query using metrics such as Hit@1, Hit@3, Hit@5, Precision@5, and MRR.
+* **Baseline vs RAG comparison** generates example answers with and without retrieved context so the effect of RAG can be inspected qualitatively.
+
+Run both with:
+
+```bash
+python scripts/run_evaluation.py
+```
+
+Or run only one part:
+
+```bash
+python scripts/run_evaluation.py --mode retrieval
+python scripts/run_evaluation.py --mode comparison
+```
+
+Generated outputs are written to `report/results/`.
+
+---
+
 # Quick Start Paths
 
 Choose one execution path:

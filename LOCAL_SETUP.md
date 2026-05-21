@@ -91,7 +91,7 @@ Indexed 2918 exercises.
 ## 8. Run retrieval evaluation
 
 ```bash
-python scripts/evaluate_retrieval.py
+python scripts/run_evaluation.py --mode retrieval
 ```
 
 This writes retrieval metrics to `report/results/`.
@@ -99,10 +99,16 @@ This writes retrieval metrics to `report/results/`.
 ## 9. Run baseline vs RAG evaluation
 
 ```bash
-python scripts/compare_baseline_rag.py
+python scripts/run_evaluation.py --mode comparison
 ```
 
 This writes comparison examples to `report/results/`.
+
+To run both evaluation steps in one command:
+
+```bash
+python scripts/run_evaluation.py
+```
 
 ## 10. Run the Streamlit app
 

@@ -61,6 +61,43 @@ Choose one execution path:
 
 * **Local setup and run:** see `LOCAL_SETUP.md`
 * **Arnes HPC setup and run:** see `ARNES_HPC_QUICKSTART.md`
+* **Peer review on Arnes HPC:** see `peer-review.md`
+
+---
+
+# Verified Arnes HPC Run
+
+The submitted HPC copy is available at:
+
+```text
+/d/hpc/projects/onj_fri/apikey
+```
+
+The verified HPC setup keeps the shared project code there and uses per-user
+runtime paths for the Python environment and Qdrant index:
+
+```text
+$HOME/apikey-venv
+$HOME/apikey_qdrant_storage
+```
+
+After Arnes SSH/OTP login, use `ARNES_HPC_QUICKSTART.md` for the full setup and
+run procedure. The core GPU-node commands are:
+
+```bash
+cd /d/hpc/projects/onj_fri/apikey
+source "$HOME/apikey-venv/bin/activate"
+export PATH="$HOME/.local/bin:$PATH"
+export OLLAMA_MODELS="$HOME/models/ollama"
+export OLLAMA_HOST="127.0.0.1:11434"
+export OLLAMA_URL="http://127.0.0.1:11434"
+export OLLAMA_MODEL="llama3.2:1b"
+export QDRANT_PATH="$HOME/apikey_qdrant_storage"
+python scripts/index_megagym.py
+streamlit run app.py --server.address 0.0.0.0 --server.port 8501
+```
+
+Run these commands inside a SLURM GPU allocation, not on the HPC login node.
 
 ---
 
@@ -116,4 +153,3 @@ Choose one execution path:
 This improves factual consistency compared to using the LLM alone.
 
 ---
-

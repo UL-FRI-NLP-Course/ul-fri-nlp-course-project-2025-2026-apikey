@@ -123,13 +123,26 @@ Run these commands inside a SLURM GPU allocation, not on the HPC login node.
 ├── report/
 │   ├── code/
 │   ├── ds_report.cls
+│   ├── figures/
 │   ├── logo.png
 │   ├── report.bib
 │   ├── report.pdf
-│   └── report.tex
+│   ├── report.tex
+│   ├── report2.pdf
+│   ├── report2.tex
+│   ├── report_final.pdf
+│   ├── report_final.tex
+│   └── results/
+│       ├── baseline_vs_rag_examples.csv
+│       ├── baseline_vs_rag_examples.md
+│       ├── retrieval_eval_results.csv
+│       └── retrieval_eval_results.md
 │
 ├── scripts/
-│   └── index_megagym.py
+│   ├── compare_baseline_rag.py
+│   ├── evaluate_retrieval.py
+│   ├── index_megagym.py
+│   └── run_evaluation.py
 │
 ├── src/
 │   ├── config.py
@@ -156,5 +169,3 @@ Run these commands inside a SLURM GPU allocation, not on the HPC login node.
 5. Final answer is generated using grounded context
 
 This improves factual consistency compared to using the LLM alone.
-
----

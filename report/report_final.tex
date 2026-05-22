@@ -19,7 +19,7 @@ Final Report\\[0.3em]
 Domain-Specific Fitness NLP Assistant Using Retrieval-Augmented Generation
 \end{center}
 }
-\Authors{Domen Pahole , Luka Rizman, Nina Trivi\'c}
+\Authors{Domen Pahole, Luka Rizman, Nina Trivi\'c}
 
 \affiliation{\textit{Advisors: Ale\v{s} \v{Z}agar}}
 
@@ -112,7 +112,7 @@ Failure mode & Unsupported but plausible suggestions & Wrong answers when retrie
 
 The clearest success case is the query \emph{``Can you recommend some triceps exercises that use a cable machine?''} In the baseline setting, the model gives plausible but generic cable-triceps suggestions. In the RAG setting, the answer is more tightly aligned with the dataset and mentions retrieved entries such as \emph{Cable Straight-Bar Push-Down} and \emph{Triceps Overhead Extension with Rope}. This is exactly the intended benefit of RAG: the same small model becomes more domain-grounded when given relevant context.
 
-The clearest failure case is \emph{``Which bodyweight leg exercises would you suggest for a beginner?''} Retrieval fails here because the returned items are only partially aligned with the intended constraints. Some retrieved exercises are plyometric, some have missing equipment information, and one result even targets abdominals rather than legs. As a consequence, the RAG answer inherits the retrieval error and becomes less useful than the baseline. This example is important because it shows that RAG does not automatically improve every answer; it improves answers only when retrieval is good enough.
+One representative failure case is \emph{``Which bodyweight leg exercises would you suggest for a beginner?''} Retrieval fails here because the returned items are only partially aligned with the intended constraints. Some retrieved exercises are plyometric, some have missing equipment information, and one result even targets abdominals rather than legs. As a consequence, the RAG answer inherits the retrieval error and becomes less useful than the baseline. This example is important because it shows that RAG does not automatically improve every answer; it improves answers only when retrieval is good enough.
 
 We also observe partial failures caused by noisy metadata and duplicates. For example, some retrieved titles are near-duplicates, and some exercise descriptions are repeated or inconsistently labeled. This reduces Precision@5 and makes the prompt context less clean than it should be.
 

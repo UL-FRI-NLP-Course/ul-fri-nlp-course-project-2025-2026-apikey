@@ -7,6 +7,12 @@ Nina Trivić
 
 ---
 
+## Project Report
+
+[View Final Report (PDF)](report/report_final.pdf)
+
+---
+
 # Project Overview
 
 This project is a domain-specific AI fitness assistant built for the Natural Language Processing course.

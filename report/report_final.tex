@@ -144,11 +144,49 @@ Total wins (5 queries) & Baseline 2 / \textbf{RAG 3} & Best overall end-to-end s
 
 \section*{5 Analysis of Successes and Failures}
 
-The clearest success case is the query \emph{``Can you recommend some triceps exercises that use a cable machine?''} In the baseline setting, the model gives plausible but generic cable-triceps suggestions. In the RAG setting, the answer is more tightly aligned with the dataset and mentions retrieved entries such as \emph{Cable Straight-Bar Push-Down} and \emph{Triceps Overhead Extension with Rope}. This is exactly the intended benefit of RAG: the same small model becomes more domain-grounded when given relevant context.
+Our qualitative analysis shows that Retrieval-Augmented Generation improves answer grounding when retrieval quality is sufficiently strong, but also exposes weaknesses when retrieval results are noisy or incomplete.
 
-One representative failure case is \emph{``Which bodyweight leg exercises would you suggest for a beginner?''} Retrieval fails here because the returned items are only partially aligned with the intended constraints. Some retrieved exercises are plyometric, some have missing equipment information, and one result even targets abdominals rather than legs. As a consequence, the RAG answer inherits the retrieval error and becomes less useful than the baseline. This example is important because it shows that RAG does not automatically improve every answer; it improves answers only when retrieval is good enough.
+\subsection*{5.1 Successful Retrieval Example}
 
-We also observe partial failures caused by noisy metadata and duplicates. For example, some retrieved titles are near-duplicates, and some exercise descriptions are repeated or inconsistently labeled. This reduces Precision@5 and makes the prompt context less clean than it should be.
+The clearest success case is the query:
+
+\begin{quote}
+\emph{``Can you recommend some triceps exercises that use a cable machine?''}
+\end{quote}
+
+In the baseline setting, the model produces plausible but generic cable-triceps suggestions without strong alignment to the dataset. In contrast, the RAG version retrieves exercises such as \emph{Cable Straight-Bar Push-Down} and \emph{Triceps Overhead Extension with Rope}, which closely match the intended muscle group and equipment constraints.
+
+This example demonstrates the main advantage of RAG in our project: the same small language model becomes substantially more domain-grounded when retrieval provides relevant context.
+
+\subsection*{5.2 Retrieval Failure Example}
+
+One representative failure case is the query:
+
+\begin{quote}
+\emph{``Which bodyweight leg exercises would you suggest for a beginner?''}
+\end{quote}
+
+Here, retrieval quality degrades noticeably. Some returned exercises are only partially related to beginner leg training, while others contain unclear naming or inconsistent metadata. For example, one retrieved result was \emph{``30 Flat Bench Leg Raise''}, which is ambiguously named and does not clearly correspond to the intended query constraints.
+
+Additionally, some retrieved exercises target unrelated muscle groups such as abdominals rather than legs. Because the generator depends directly on retrieved context, the final RAG response inherits these retrieval errors and becomes less useful than the baseline answer.
+
+This example highlights an important limitation of RAG systems: retrieval does not automatically improve answer quality. The generation stage is only as reliable as the retrieved context it receives.
+
+\subsection*{5.3 Incomplete Retrieval and Metadata Noise}
+
+We also observe partial failures caused by incomplete retrieval results, noisy metadata, and near-duplicate entries in the dataset.
+
+For example, for the query:
+
+\begin{quote}
+\emph{``Back exercises with dumbbells''}
+\end{quote}
+
+the system generated only three meaningful exercise suggestions before producing a \emph{``No data available''} output for the fourth retrieved item. This indicates that retrieval sometimes fails to provide sufficiently complete or relevant context for stable answer generation.
+
+Additional problems originate from inconsistent dataset formatting. Some exercise descriptions are repeated, some titles are near-duplicates, and certain metadata fields are missing or weakly standardized. These issues reduce retrieval precision and make the prompt context noisier than intended.
+
+Overall, our analysis suggests that retrieval quality is the dominant bottleneck of the current system. When retrieval is strong, RAG substantially improves grounding and specificity. When retrieval is weak or noisy, the final answer quality degrades quickly.
 
 \section*{6 Discussion}
 

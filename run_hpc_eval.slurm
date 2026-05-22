@@ -10,17 +10,18 @@
 
 set -euo pipefail
 
-cd "$HOME/rag-app"
+PROJECT_DIR="${PROJECT_DIR:-/d/hpc/projects/onj_fri/apikey}"
+cd "$PROJECT_DIR"
 mkdir -p logs
 
-source .venv/bin/activate
+source "${VENV_DIR:-$HOME/apikey-venv}/bin/activate"
 
 export PATH="$HOME/.local/bin:$PATH"
 export OLLAMA_MODELS="$HOME/models/ollama"
 export OLLAMA_HOST="127.0.0.1:11434"
 export OLLAMA_URL="http://127.0.0.1:11434"
-export OLLAMA_MODEL="${OLLAMA_MODEL:-qwen2.5:1.5b}"
-export QDRANT_PATH="${QDRANT_PATH:-$HOME/rag-app/qdrant_storage}"
+export OLLAMA_MODEL="${OLLAMA_MODEL:-llama3.2:1b}"
+export QDRANT_PATH="${QDRANT_PATH:-$HOME/apikey_qdrant_storage}"
 
 echo "Running on node: $(hostname)"
 echo "Job ID: ${SLURM_JOB_ID}"

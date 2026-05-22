@@ -1,39 +1,41 @@
 # Arnes HPC Quickstart
 
-This guide starts after you pull the repository. It shows how to run the final
-Fitness RAG assistant on Arnes HPC with:
+This is a guide to running the project on Arnes HPC.
 
-- Streamlit UI
-- Ollama model `llama3.2:1b`
-- local Qdrant storage through `QDRANT_PATH`
-- MegaGym exercise dataset indexing
-- retrieval and baseline-vs-RAG evaluation
+You will:
 
-**Note:** this quickstart assumes a Bash/Linux-style shell for the commands shown
-below. The remote HPC commands run on Linux. If you are using Windows
-PowerShell on your laptop, some local commands such as `test -f`, `pbcopy`,
-`rsync`, `~/.ssh/...`, and `&&` or `||` will need PowerShell equivalents or a
-Unix-like shell such as Git Bash or WSL.
+- upload the repository to HPC
+- prepare Python and Ollama
+- request a GPU node
+- build the Qdrant index
+- run evaluation
+- open the Streamlit app through an SSH tunnel
+
+This guide assumes a Bash/Linux shell for the commands below.
+
+If you are on Windows and do not already have a Linux-like shell, use WSL,
+Git Bash, or a similar Unix-like environment for the upload commands.
 
 Replace `<USERNAME>` with your Arnes username.
 
-## 1. Local Pull
+## 1. Before you start
 
-On your laptop:
+You should already have the repository on your laptop.
 
-```bash
-git clone <REPOSITORY_URL>
-cd ul-fri-nlp-course-project-2025-2026-apikey
-```
+This guide uses:
 
-If you already cloned it:
+- project folder on HPC: `~/rag-app`
+- model: `llama3.2:1b`
+- local Qdrant storage: `~/rag-app/qdrant_storage`
 
-```bash
-cd ul-fri-nlp-course-project-2025-2026-apikey
-git pull
-```
+Important:
 
-## 2. One-Time Arnes SSH And OTP Setup
+- use the login node only for setup and SLURM commands
+- run Ollama, indexing, evaluation, and Streamlit only on a GPU compute node
+
+## 2. One-time SSH and OTP setup
+
+If you already tested SSH login to Arnes HPC before, you can skip this section.
 
 Check whether you already have an SSH public key:
 
@@ -41,68 +43,42 @@ Check whether you already have an SSH public key:
 test -f ~/.ssh/id_ed25519.pub && echo "SSH public key exists" || echo "No default SSH public key"
 ```
 
-If it does not exist:
+If not, create one:
 
 ```bash
 ssh-keygen -t ed25519 -C "your.email@example.com"
 ```
 
-Copy the public key:
-
-```bash
-pbcopy < ~/.ssh/id_ed25519.pub
-```
-
-Open:
+Copy the public key and add it at:
 
 ```text
 https://fido.sling.si/
 ```
 
-Add the copied public key under your user settings, in `SSH public keys`, then
-save the profile.
+The key should be added under your profile in `SSH public keys`.
 
-Configure the Arnes HPC OTP token through the special OTP host:
+Important: if your key has a custom name such as `id_ed25519_sling`, use that
+exact filename in the SSH commands below instead of `id_ed25519`.
+
+Then configure the OTP token:
 
 ```bash
 ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes <USERNAME>@hpc-otp.arnes.si
 ```
 
-Scan the QR code shown in the terminal with Google Authenticator. Use this
-6-digit code for future HPC SSH logins.
+Scan the QR code with Google Authenticator or a similar app, then enter the generated OTP code to verify.
 
-Test login:
+After that, test normal login:
 
 ```bash
 ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes <USERNAME>@hpc-login.arnes.si
 ```
 
-Expected result:
+If it works, you should see the login prompt on the HPC login node.
 
-```text
-Verification code:
-Prijavno vozlišče Arnesove HPC gruče
-[<USERNAME>@hpc-login... ~]$
-```
+## 3. Upload the project to HPC
 
-Then:
-
-```bash
-hostname
-pwd
-exit
-```
-
-Do not run model inference, indexing, or Streamlit on the login node. Use the
-login node only for setup and SLURM commands.
-
-## 3. Upload Project To The HPC Home Directory
-
-This guide uses `~/rag-app` in the user's HPC home directory as the working
-project location. If your course setup later uses a shared project directory,
-adapt the paths in this guide accordingly.
-
-From your laptop, inside the repository root:
+From your laptop, inside the repository root.
 
 ```bash
 rsync -av \
@@ -116,74 +92,54 @@ rsync -av \
   ./ <USERNAME>@hpc-login.arnes.si:~/rag-app/
 ```
 
-Expected result ends with something like:
+If `rsync` fails with `Permission denied (publickey)`, the quickstart is not
+necessarily wrong. It usually means the SSH key used by `rsync` is not the same
+key that works for your manual `ssh` login. In that case, first verify which key
+works with a normal SSH command, for example:
 
-```text
-sent ... bytes  received ... bytes
-total size is ...
+```bash
+ssh -i ~/.ssh/id_ed25519_sling -o IdentitiesOnly=yes <USERNAME>@hpc-login.arnes.si
 ```
 
-After upload, login:
+Then either configure SSH to use that key by default for Arnes HPC, or run the
+upload from an environment where that key is already configured.
 
+Then log in:
 
 ```bash
 ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes <USERNAME>@hpc-login.arnes.si
-```
-
-Go to the prepared project directory:
-
-```bash
 cd ~/rag-app
 ls -la
 ```
 
-Expected result: the directory contains files such as:
+If you use a custom key name, replace `id_ed25519` here as well.
 
-```text
-app.py
-requirements.txt
-src/
-scripts/
-data/
-report/
-ARNES_HPC_QUICKSTART.md
-```
+Success looks like this:
 
-If your deployment moves to `/d/hpc/projects/onj_fri/apikey`, update the paths
-in this guide from `~/rag-app` to that shared project path.
+- you are inside `~/rag-app`
+- you can see files such as `app.py`, `requirements.txt`, `src/`, `scripts/`, and `report/`
 
-## 4. Prepare Python Environment On HPC
+## 4. Create the Python environment
 
-This step is only needed once per user/HPC copy. If `.venv` already exists in
-`~/rag-app`, skip to step 5.
-
-Check:
+This is usually needed only once per HPC copy of the project.
 
 ```bash
 cd ~/rag-app
-test -d .venv && echo "venv exists" || echo "venv missing"
-```
-
-If it is missing, prepare directories and install Python dependencies:
-
-```bash
 mkdir -p ~/rag-app ~/models/ollama ~/.local ~/logs
-cd ~/rag-app
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-Expected result:
+Success looks like this:
 
-```text
-Successfully installed ... streamlit ... sentence-transformers ... qdrant-client
-```
+- the `.venv` folder exists
+- `pip install -r requirements.txt` finishes without errors
 
-## 5. Install Ollama Without Sudo
+## 5. Install Ollama
 
-On the HPC login node:
+Run this on the login node:
 
 ```bash
 cd ~
@@ -196,17 +152,9 @@ which ollama
 ollama --version
 ```
 
-Expected result:
+The warning about not connecting to a running Ollama instance is normal here.
 
-```text
-~/.local/bin/ollama
-Warning: could not connect to a running Ollama instance
-Warning: client version is ...
-```
-
-The warning is normal because the Ollama server is not running yet.
-
-Save the environment variables for future shell sessions:
+To keep these variables for future sessions, add them to `.bashrc`:
 
 ```bash
 grep -q 'OLLAMA_MODELS' ~/.bashrc || cat >> ~/.bashrc <<'EOF'
@@ -215,36 +163,28 @@ export OLLAMA_MODELS="$HOME/models/ollama"
 EOF
 ```
 
-## 6. Start An Interactive GPU Session
+## 6. Request a GPU node
 
-From the HPC login node:
+From the login node:
 
 ```bash
 salloc --partition=gpu --gres=gpu:1 --cpus-per-task=8 --mem=32G --time=02:00:00
-```
-
-When allocation is granted, enter the compute node:
-
-```bash
 srun --pty bash
 ```
 
-Check that you are on a GPU node:
+Check that you are really on a GPU node:
 
 ```bash
 hostname
 nvidia-smi
 ```
 
-Expected result:
+Success looks like this:
 
-```text
-wn...arnes.si
-NVIDIA-SMI ...
-Tesla V100S-PCIE-32GB
-```
+- hostname starts with something like `wn...`
+- `nvidia-smi` shows a GPU such as `Tesla V100S-PCIE-32GB`
 
-## 7. Start Ollama And Pull The Final Model
+## 7. Start Ollama and pull the model
 
 Inside the GPU node shell:
 
@@ -263,42 +203,30 @@ sleep 5
 curl -s http://127.0.0.1:11434/api/tags
 ```
 
-Expected result:
+If Ollama is running correctly, you should get a JSON response.
 
-```json
-{"models":[]}
-```
-
-Pull the final model:
+Now pull the model:
 
 ```bash
 ollama pull llama3.2:1b
 ollama list
 ```
 
-Expected result:
-
-```text
-NAME            ID              SIZE
-llama3.2:1b     ...             ...
-```
-
-Test GPU inference:
+Optional quick test:
 
 ```bash
 ollama run llama3.2:1b "Answer in one sentence: what is a dumbbell chest press?"
 ollama ps
 ```
 
-Expected result:
+Success looks like this:
 
-```text
-PROCESSOR    100% GPU
-```
+- `llama3.2:1b` appears in `ollama list`
+- `ollama ps` shows the model using the GPU
 
-## 8. Build The Local Qdrant Index
+## 8. Build the vector index
 
-Inside the GPU node shell:
+Still on the GPU node:
 
 ```bash
 cd ~/rag-app
@@ -310,19 +238,12 @@ python scripts/index_megagym.py
 Expected result:
 
 ```text
-Batches: 100%|...
 Indexed 2918 exercises.
 ```
 
-This creates a persistent local Qdrant database at:
+## 9. Run evaluation
 
-```text
-~/rag-app/qdrant_storage
-```
-
-## 9. Run Retrieval Evaluation
-
-Inside the GPU node shell:
+### Retrieval only
 
 ```bash
 cd ~/rag-app
@@ -331,7 +252,7 @@ export QDRANT_PATH="$HOME/rag-app/qdrant_storage"
 python scripts/run_evaluation.py --mode retrieval
 ```
 
-Expected result from the verified HPC run:
+Expected result from the verified run:
 
 ```text
 Evaluated 11 retrieval queries
@@ -340,12 +261,9 @@ Hit@3: 0.909
 Hit@5: 0.909
 Precision@5: 0.582
 MRR: 0.742
-Wrote results to /d/hpc/home/<USERNAME>/rag-app/report/results
 ```
 
-## 10. Run Baseline Vs RAG Evaluation
-
-Make sure Ollama is still running, then:
+### Baseline vs RAG comparison
 
 ```bash
 cd ~/rag-app
@@ -356,31 +274,21 @@ export OLLAMA_MODEL="llama3.2:1b"
 python scripts/run_evaluation.py --mode comparison
 ```
 
-Expected result:
-
-```text
-Generating baseline and RAG answers for: ...
-Wrote comparison examples to /d/hpc/home/<USERNAME>/rag-app/report/results
-```
-
-The output files are:
-
-```text
-report/results/retrieval_eval_results.md
-report/results/retrieval_eval_results.csv
-report/results/baseline_vs_rag_examples.md
-report/results/baseline_vs_rag_examples.csv
-```
-
-To run both evaluation steps in sequence:
+### Run both in one command
 
 ```bash
 python scripts/run_evaluation.py
 ```
 
-## 11. Run The Streamlit UI
+Output files are written to:
 
-Inside the GPU node shell, keep Ollama running and start Streamlit:
+```text
+report/results/
+```
+
+## 10. Run the Streamlit app
+
+Keep Ollama running on the GPU node, then start Streamlit:
 
 ```bash
 cd ~/rag-app
@@ -391,13 +299,6 @@ export OLLAMA_MODEL="llama3.2:1b"
 streamlit run app.py --server.address 0.0.0.0 --server.port 8501 > logs/streamlit-${SLURM_JOB_ID}.log 2>&1 &
 sleep 5
 tail -n 30 logs/streamlit-${SLURM_JOB_ID}.log
-```
-
-Expected result:
-
-```text
-You can now view your Streamlit app in your browser.
-URL: http://0.0.0.0:8501
 ```
 
 Find the compute node name:
@@ -412,8 +313,7 @@ Example:
 wn203.arnes.si
 ```
 
-From a new local laptop terminal, open an SSH tunnel through the login node. Use
-the short node name, for example `wn203`:
+From a new terminal on your laptop, open the SSH tunnel:
 
 ```bash
 ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes \
@@ -421,26 +321,17 @@ ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes \
   <USERNAME>@hpc-login.arnes.si
 ```
 
-Keep this terminal open. Then open in your laptop browser:
+Then open this in your browser:
 
 ```text
 http://127.0.0.1:8501
 ```
 
-Test question:
+## 11. Copy results back to your laptop
 
-```text
-Can you recommend some triceps exercises that use a cable machine?
-```
+Only do this if you want a local copy of the HPC-generated result files.
 
-Expected behavior: the app returns cable-based triceps exercises from the
-MegaGym dataset, such as cable triceps extensions or cable push-down variants,
-and shows the retrieved context.
-
-## 12. Copy Results Back To Your Laptop
-
-Only do this if you intentionally want a local copy of the current HPC result
-files. From your local laptop terminal, inside the repository root:
+From your laptop, inside the repository root:
 
 ```bash
 rsync -av \
@@ -448,26 +339,27 @@ rsync -av \
   report/results/
 ```
 
-Expected result:
+## 12. What success looks like
 
-```text
-baseline_vs_rag_examples.csv
-baseline_vs_rag_examples.md
-retrieval_eval_results.csv
-retrieval_eval_results.md
-```
+The HPC path is working correctly when:
 
-## 13. Optional Batch Evaluation
+- you can log in with SSH and OTP
+- you can get a GPU node with `salloc` and `srun`
+- `llama3.2:1b` runs through Ollama on the GPU node
+- indexing finishes with `Indexed 2918 exercises.`
+- evaluation writes files into `report/results/`
+- Streamlit opens through the SSH tunnel and answers questions
 
-After the manual setup has worked once, you can repeat the evaluation as a batch
-job:
+## 13. Optional batch evaluation
+
+After the manual path works once, you can run evaluation as a batch job:
 
 ```bash
 cd ~/rag-app
 sbatch run_hpc_eval.slurm
 ```
 
-Monitor:
+Monitor it with:
 
 ```bash
 squeue -u $USER

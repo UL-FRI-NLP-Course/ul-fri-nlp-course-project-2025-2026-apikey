@@ -1,4 +1,4 @@
-# Fitness NLP Assistant Using RAG
+# Fitness NLP Assistant Using Retrieval-Augmented Generation
 
 **Authors:**
 Domen Pahole,
@@ -60,7 +60,6 @@ Generated outputs are written to `report/results/`.
 Choose one execution path:
 
 * **Local setup and run:** see `LOCAL_SETUP.md`
-* **Arnes HPC setup and run:** see `ARNES_HPC_QUICKSTART.md`
 * **Peer review on Arnes HPC:** see `peer-review.md`
 
 ---
@@ -81,7 +80,7 @@ $HOME/apikey-venv
 $HOME/apikey_qdrant_storage
 ```
 
-After Arnes SSH/OTP login, use `ARNES_HPC_QUICKSTART.md` for the full setup and
+After Arnes SSH/OTP login, use `peer-review.md` for the full setup and
 run procedure. The core GPU-node commands are:
 
 ```bash
@@ -132,7 +131,7 @@ Run these commands inside a SLURM GPU allocation, not on the HPC login node.
 │   └── rag.py
 │
 ├── .gitignore
-├── ARNES_HPC_QUICKSTART.md
+├── peer-review.md
 ├── LOCAL_SETUP.md
 ├── app.py
 ├── docker-compose.yml

@@ -8,7 +8,8 @@
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{array}
-\graphicspath{{fig/}}
+\usepackage{tabularx}
+\graphicspath{{fig/}{figures/}}
 
 \JournalInfo{FRI Natural Language Processing Course 2026}
 \Archive{Final project report}
@@ -34,6 +35,10 @@ We present a domain-specific fitness assistant built around Retrieval-Augmented 
 \flushbottom
 \maketitle
 \thispagestyle{empty}
+\fancyhf{}
+\fancyhead[R]{\small\sffamily\bfseries \thepage/\pageref{LastPage}}
+\renewcommand{\headrulewidth}{0pt}
+\setlength{\headheight}{14pt}
 
 \section*{1 Introduction}
 
@@ -47,13 +52,39 @@ The project follows the course topic of domain-specific AI assistants. We define
 
 \textbf{Knowledge representation.} Each exercise is converted into a textual record containing the title, description, type, body part, equipment, difficulty level, and rating metadata. These records are embedded and stored in Qdrant.
 
-\textbf{Retriever.} We use the sentence-transformer model \texttt{sentence-transformers/all-MiniLM-L6-v2}. Similarity search is performed in Qdrant with cosine distance. The default retrieval depth is top-$k=5$.
+\textbf{Retriever.} We use the Sentence Transformers model all-MiniLM-L6-v2. Retrieval uses cosine similarity in Qdrant with default depth top-$k=5$.
 
-\textbf{Generator.} For answer generation we use \texttt{llama3.2:1b} through Ollama. This choice was motivated by the course constraint to use a small model that can also be deployed on HPC. The same model is used in both the baseline and RAG settings, so the comparison isolates the effect of retrieval rather than model size.
+\textbf{Generator.} For answer generation we use Llama 3.2 1B through Ollama. This choice follows the course constraint to use a small model that can also run on HPC. The same model is used in both baseline and RAG settings, so the comparison isolates retrieval effects rather than model size.
 
 \textbf{Prompting.} In the RAG setting, the prompt instructs the model to use only retrieved exercise entries, prefer matches by body part, equipment, and difficulty, remove duplicates, and explicitly state when the dataset is insufficient. The baseline prompt receives only the user question.
 
 \textbf{Implementation details.} The repository contains a Streamlit interface, indexing script, retrieval evaluation script, baseline-vs-RAG comparison script, and a unified evaluation runner. The system can run locally with Docker-based Qdrant or on Arnes HPC with local Qdrant storage and Ollama on a GPU node.
+
+\begin{table}[h]
+\centering
+\caption{Algorithm settings used for all reported results. The table is self-contained: it specifies the model choices, retrieval setup, and operational hyperparameters needed to rerun the same pipeline.}
+\label{tab:algorithm-settings}
+\small
+\begin{tabularx}{\columnwidth}{@{}>{\raggedright\arraybackslash}p{0.32\columnwidth} >{\raggedright\arraybackslash}X@{}}
+\toprule
+Component & Final setting \\
+\midrule
+Retriever encoder & Sentence Transformers all-MiniLM-L6-v2 (384-dimensional embeddings) \\
+Vector database and search & Qdrant collection \texttt{megagym\_exercises}, cosine similarity \\
+Retrieval depth & Top-$k=5$ for app responses and evaluation scripts \\
+Main improvement in prompting & Use only retrieved entries, prioritize body part/equipment/difficulty matches, remove near-duplicates, and explicitly state when context is insufficient \\
+Generator & \texttt{llama3.2:1b} via Ollama (same model in baseline and RAG) \\
+Indexing/runtime hyperparameters & Embedding batch size 64, Qdrant upsert chunk size 512, Ollama request timeout 180\,s \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.58\columnwidth,height=0.45\textheight,keepaspectratio]{rag_pipeline.png}
+\caption{RAG pipeline used in the fitness assistant: user query, retrieval from Qdrant, and grounded generation with Llama 3.2 1B.}
+\label{fig:rag-pipeline}
+\end{figure}
 
 \section*{3 Evaluation Setup}
 
@@ -61,7 +92,7 @@ We evaluate the system in two complementary ways.
 
 \textbf{Retrieval evaluation.} We created a small benchmark of 11 natural-language fitness queries with manually specified expectations. Each query defines relevant properties such as body part, equipment, difficulty level, and keywords. Retrieved items are marked relevant if they satisfy these constraints. We report Hit@1, Hit@3, Hit@5, Precision@5, and Mean Reciprocal Rank (MRR).
 
-\textbf{End-to-end comparison.} We also compare baseline generation and RAG generation on five representative questions. This evaluation is qualitative rather than fully annotated. Its purpose is to show whether retrieval improves grounding, specificity, and alignment with the dataset.
+\textbf{End-to-end comparison.} We compare baseline generation and RAG generation on five representative questions. For each question, we manually select the better answer based on constraint alignment (body part, equipment, difficulty) and dataset grounding. This gives a compact per-query winner table while keeping the same model fixed in both settings.
 
 \section*{4 Results}
 
@@ -87,26 +118,29 @@ MRR & 0.742 \\
 
 The results show that retrieval is already strong enough to support a useful RAG pipeline. In 10 out of 11 queries, at least one relevant exercise appears in the top five retrieved items. However, the lower Hit@1 score shows that the first retrieved result is still often suboptimal. This matters because the generator is sensitive to noisy or weak context.
 
-Table~\ref{tab:qualitative} summarizes the qualitative comparison between baseline and RAG behavior.
+Table~\ref{tab:e2e-comparison} summarizes the end-to-end comparison in one consolidated format so the reader can compare systems query-by-query.
 
 \begin{table}[h]
 \centering
-\caption{Qualitative comparison between direct generation and RAG using the same Llama 3.2 1B model. The table highlights the main behavioral difference observed in the generated examples.}
-\label{tab:qualitative}
-\begin{tabular}{>{\raggedright\arraybackslash}p{3.1cm} >{\raggedright\arraybackslash}p{4.2cm} >{\raggedright\arraybackslash}p{4.2cm}}
+\caption{Consolidated baseline-vs-RAG comparison on five representative questions using the same Llama 3.2 1B model. ``Better'' is decided by manual judgment of alignment with query constraints and grounding in retrieved MegaGym entries. The last row reports total wins; the best total is bolded.}
+\label{tab:e2e-comparison}
+\small
+\begin{tabularx}{\columnwidth}{@{}>{\raggedright\arraybackslash}p{0.29\columnwidth} >{\raggedright\arraybackslash}p{0.17\columnwidth} >{\raggedright\arraybackslash}X@{}}
 \toprule
-Aspect & Baseline & RAG \\
+Query & Better & Evidence \\
 \midrule
-Knowledge source & General model knowledge & Retrieved MegaGym entries + model \\
-
-Exercise naming & Often generic or paraphrased & Usually matches dataset entries more closely \\
-
-Grounding & No explicit grounding & Explicitly grounded in retrieved context \\
-
-Failure mode & Unsupported but plausible suggestions & Wrong answers when retrieval is weak or noisy \\
+Triceps with cable & \textbf{RAG} & Uses cable-triceps exercises directly matching retrieved dataset entries, while baseline remains generic. \\
+Beginner bodyweight legs & \textbf{Baseline} & Retrieved set is partially mismatched (plyometrics and off-target items), so RAG inherits retrieval errors. \\
+Back with pull-up bar & \textbf{Baseline} & RAG includes off-target suggestions (e.g., squat), while baseline stays closer to the requested equipment. \\
+Biceps with barbell & \textbf{RAG} & More grounded barbell naming from retrieved entries; baseline includes broader generic advice. \\
+Abs with exercise ball & \textbf{RAG} & Better dataset-grounded naming of exercise-ball abdominal variants. \\
+\midrule
+Total wins (5 queries) & Baseline 2 / \textbf{RAG 3} & Best overall end-to-end score in this project is RAG. \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
+
+\noindent Related prior work in fitness recommendation \cite{Yang2023} is contextually relevant but not directly comparable numerically here because it targets a different setup and does not report MegaGym retrieval metrics such as Hit@$k$ or MRR.
 
 \section*{5 Analysis of Successes and Failures}
 
@@ -118,7 +152,7 @@ We also observe partial failures caused by noisy metadata and duplicates. For ex
 
 \section*{6 Discussion}
 
-The main conclusion is that retrieval quality dominates final answer quality in this project. The generator is not the main bottleneck. Even with a small 1B model, the system can produce useful domain-specific answers when the retrieved context is relevant. Conversely, when retrieval is weak, the RAG answer degrades quickly.
+The main conclusion is that retrieval quality dominates final answer quality in this project. Our main improvement over baseline is the grounding-constrained RAG prompt: the model is forced to use retrieved entries, prioritize body part/equipment/difficulty matches, remove duplicates, and admit insufficient evidence. This improves specificity when retrieval is good and makes failure cases easier to diagnose when retrieval is noisy.
 
 This finding is practically useful for future work. The most promising improvements are not larger models, but better retrieval and cleaner data. In particular, the next steps should include:
 
@@ -133,7 +167,7 @@ Our work is also consistent with the general motivation of RAG systems \cite{Lew
 
 \section*{7 Reproducibility and Final Take-Away}
 
-The repository is structured so that another student can rerun the project with minimal setup. The dataset source is linked, indexing is scripted, evaluation is scripted, and both local and HPC execution paths are documented. This satisfies the course requirement that the project should be understandable and easy to rerun by reviewers.
+The repository is structured so that another student can rerun the project with minimal setup. Dependencies are pinned in \path{requirements.txt}; local setup and HPC setup are documented in \path{LOCAL_SETUP.md} and \path{peer-review.md}. The MegaGym dataset is linked (not versioned), indexing and evaluation scripts are included, and results are written to \path{report/results/}. This satisfies the requirement that reviewers can understand and rerun the full pipeline.
 
 \textbf{Take-away message.} With the same small 1B language model, RAG improves domain grounding by forcing answers to use retrieved MegaGym exercise entries. The main limitation is not the generator itself, but retrieval quality: when retrieval is strong, answers become more specific and trustworthy; when retrieval is weak, the whole system fails with it.
 

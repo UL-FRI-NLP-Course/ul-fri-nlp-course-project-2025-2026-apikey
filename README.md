@@ -1,4 +1,4 @@
-# Domain-Specific Fitness NLP Assistant Using Retrieval-Augmented Generation (RAG)
+# Fitness NLP Assistant Using RAG
 
 **Authors:**
 Domen Pahole,
